@@ -32,7 +32,7 @@ export default class Home extends React.Component{
     render(){
         return (
             <div className="Home">
-            <Navbar loginSuccess={this.props.loginSuccess} logout={this.props.logout} info={this.props.info} Tokenizer={this.props.Tokenizer} />
+            <Navbar loginSuccess={this.props.loginSuccess} logout={this.props.logout} Tokenizer={this.props.Tokenizer} />
             <MDBCarousel
               activeItem={1}
               length={1}

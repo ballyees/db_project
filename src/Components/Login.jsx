@@ -10,7 +10,7 @@ export default class Login extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            email: '',
+            username: '',
             password: '',
             rememberMe: false,
             company: 0,
@@ -34,14 +34,13 @@ export default class Login extends React.Component{
     }
 
     SubmitBtn = async () => {
-        let success = await this.props.Tokenizer.Login(this.state.email, this.state.password)
-        // let success = this.props.Login(this.state.email, this.state.password)
+        let success = await this.props.Tokenizer.Login(this.state.username, this.state.password)
         if (success){
             this.setState({
                 isSuccess: true
             })
+            console.log('in login page', this.props.Tokenizer.isLogin)
             this.props.callBack({isLoginSuccess: true, company: Boolean(this.state.company)})
-            // this.props.callBack({isLoginSuccess: true, company: true})
             if(this.state.rememberMe){
                 localStorage.setItem('isLogin', '1')
             }else{
@@ -73,27 +72,15 @@ export default class Login extends React.Component{
                                                     <h4 className="text-dark mb-4">Welcome to Find Jobs</h4>
                                                 </div>
                                                 <div className="user">
-                                                    <div className="form-group">
-                                                        <select className="browser-default custom-select" name="company" onChange={this.onChange}>
-                                                            <option value="">Jobseeker</option>
-                                                            <option value="1">Company</option>
-                                                        </select>
-                                                    </div>
-                                                    <MDBInput label="Email Address" outline name="email" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                                    <MDBInput label="username" outline name="username" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                                     <MDBInput type="password" label="Password" outline name="password" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
-                                                    {/* <div className="form-group"><input className="form-control form-control-user" type="input" id="username" aria-describedby="emailHelp" placeholder="Enter Username..." /></div>
-                                                    <div className="form-group"><input className="form-control form-control-user" type="password" id="password" placeholder="Password" /></div> */}
                                                     <div className="custom-control custom-checkbox" style={{paddingBottom: "4%", textAlign: "left"}}>
                                                         <input type="checkbox" className="custom-control-input" id="rememberMe" name="rememberMe" onChange={this.onChange} ref="rememberMe" />
                                                         <label className="custom-control-label" htmlFor="rememberMe">Remember Me</label>
                                                     </div>
                                                     <button className="btn btn-info btn-block text-white btn-user" id="submit-btn" type="submit" style={{borderRadius: "20px"}} onClick={this.SubmitBtn}>SIGN IN</button>
-                                                    <hr />
                                                 </div>
-                                                <Link to="/find-jobs/home"><span className="forgot">Forgot your password?</span></Link>
                                                 {this.state.isSuccess?<Redirect to="/find-jobs/home" />:<div></div>}
-                                                <hr />
-                                                <span className="forgot">Don't have an account? </span><Link to="/find-jobs/register">Sign Up</Link>
                                             </div>
                                         </div>
                                     </div>

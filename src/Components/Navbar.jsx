@@ -7,16 +7,17 @@ import './Navbar.css'
 
 export default class Navbar extends Component{
     constructor(props) {
-      super(props);
+      super();
       this.state = {
-        menu: false
+        menu: false,
+        dummy: false
       };
       this.toggleMenu = this.toggleMenu.bind(this);
     }
 
     async toggleMenu(e){
       this.setState({ menu: !this.state.menu })
-      if(e.target.name === 'logout'){
+      if(e !== undefined && e.target.name === 'logout'){
         let success = await this.props.Tokenizer.Logout()
         if (success){
           this.props.logout()
@@ -28,8 +29,9 @@ export default class Navbar extends Component{
       const show = (this.state.menu) ? "show" : ""
       let loginSuccess
       let company
+      console.log(this.props.Tokenizer.isLogin)
       if (this.props.loginSuccess){
-        if(this.props.info.company){
+        if(true){
           company = (
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               <PostModals onClickP2C={this.toggleMenu} style={{borderRadius: "20px"}} />

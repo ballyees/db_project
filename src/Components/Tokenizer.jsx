@@ -3,6 +3,7 @@ export default class Tokenizer {
     #username;
     #token;
     #type;
+    #isLogin = false;
 
     constructor(name){
         this.name = name
@@ -10,17 +11,33 @@ export default class Tokenizer {
     get token(){
         return this.#token
     }
-
-    getToString(){
-        return `${this.#username} :: ${this.#type} :: ${this.#token}`
+    get isLogin(){
+        console.log('IN IS LOGIN')
+        return this.#isLogin
     }
 
-    setUserLogin = (data) => {
-        console.log(data)
+    get type(){
+        return this.#type
+    }
+
+    toString(){
+        return `${this.#username} :: ${this.#type} :: ${this.#token} :: ${this.#isLogin}`
+    }
+
+    setUserLogout(){
+        this.#username = ''
+        this.#token = ''
+        this.#type = ''
+        this.#isLogin = false
+    }
+
+    async setUserLogin(data){
+        // console.log(data)
         this.#username = data[ConfigureTokenizer.keyResponseData][0].username
         this.#token = data[ConfigureTokenizer.keyTokenHeader]
         this.#type = data[ConfigureTokenizer.keyResponseData][0].type
-        console.log(this.#username, this.#type, this.#token)
+        this.#isLogin = true
+        console.log(this.toString())
     }
 
     async setRefershtoken(response){
@@ -66,6 +83,10 @@ export default class Tokenizer {
             mode: 'cors',
         }
         let response = await fetch(ConfigureTokenizer.proxyAnywhereAndUrlUserLogout, options).then(response => response)
+        if (response.ok){
+            this.setUserLogout()
+            console.log(this.toString())
+        }
         return response.ok
     }
 }

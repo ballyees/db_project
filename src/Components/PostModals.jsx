@@ -16,7 +16,7 @@ export default class PostModals extends React.Component{
         this.setState({
             modal: !this.state.modal
         });
-        if(e.target.name === 'close'){
+        if(e === undefined || e.target.name === 'close'){
             // reset state
             for(let i=0; i<this.state.roleSize; i++){
                 delete this.state[`role${i}`]
