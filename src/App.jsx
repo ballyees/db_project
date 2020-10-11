@@ -35,9 +35,9 @@ export default class App extends React.Component{
   }
 
   changeLogin = (e) => {
-    this.setState((state, props) => ({
+    this.setState({
       loginSuccess: e.isLoginSuccess,
-    }))
+    })
   }
 
   renderLogin(){
@@ -66,8 +66,6 @@ export default class App extends React.Component{
             <Route exact path="/find-jobs/data" render={(props) => (isLoginComponent)} />
             <Route exact path="/find-jobs/profile" render={(props) => <Profile/>} />
             <Route exact path="/find-jobs/search" render={(props) => <Profile/>} />
-            {/* <Route exact path="/find-jobs/post" render={(props) => <Profile/>} /> */}
-            {/* <Route exact path="/find-jobs/data" render={(props) => (!this.state.loginSuccess?(<Redirect to="/find-jobs/home" />):(<Data />))} /> */}
           </div>
       </Router>
     );

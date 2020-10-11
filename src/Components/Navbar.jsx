@@ -7,18 +7,12 @@ import './Navbar.css'
 
 export default class Navbar extends Component{
     constructor(props) {
-      // console.log('props nav:',props)
       super(props);
       this.state = {
         menu: false,
         dummy: false,
       };
       this.toggleMenu = this.toggleMenu.bind(this);
-    }
-    
-    componentWillUnmount(){
-      console.log('componentUpdate')
-      this.setState({dummy: !this.state.dummy})
     }
 
     async toggleMenu(e){
@@ -34,20 +28,13 @@ export default class Navbar extends Component{
     render(){
       const show = (this.state.menu) ? "show" : ""
       let loginSuccess
-      let company
-      console.log(this.props.Tokenizer.isLogin);
+      let userType
+      console.log(this.props.Tokenizer.toString());
       if (this.props.loginSuccess){
         if(true){
-          company = (
+          userType = (
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               <PostModals onClickP2C={this.toggleMenu} style={{borderRadius: "20px"}} />
-            </li>
-          )
-        }else{
-          company = (
-            <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-              <SearchModals onClickP2C={this.toggleMenu} style={{borderRadius: "20px"}} />
-              {/* <Link to="/find-jobs/profile"><MDBBtn type="button" style={{borderRadius: "20px"}} outline onClick={this.toggleMenu} >Search</MDBBtn></Link> */}
             </li>
           )
         }
@@ -57,9 +44,9 @@ export default class Navbar extends Component{
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
                 </li>
-                {company}
+                {userType}
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-                  <Link to="/find-jobs/home"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="danger" onClick={this.toggleMenu} name="logout">Logout</MDBBtn></Link>
+                  <Link to="/find-jobs/login"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="danger" onClick={this.toggleMenu} name="logout">Logout</MDBBtn></Link>
                 </li>
             </ul>
           </div>
@@ -69,7 +56,7 @@ export default class Navbar extends Component{
           <div className={"collapse navbar-collapse " + show} id="navbarResponsive">
             <ul className="nav navbar-nav ml-auto">
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-                  <Link to="/find-jobs/login"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Sign in</span></Link>
+                  <Link to="/find-jobs/login"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu} >Sign in</span></Link>
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <Link to="/find-jobs/register"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="info" onClick={this.toggleMenu} >Sign Up</MDBBtn></Link>
@@ -84,7 +71,7 @@ export default class Navbar extends Component{
             <nav className="navbar sticky-top navbar-dark bg-dark navbar-expand-md navbar navbar-expand-lg fixed-top" id="mainNav">
               <div className="container">
                 <NavLink to="/find-jobs/home">
-                  <span className="navbar-brand js-scroll-trigger" style={{paddingTop: 5}} >Find-Jobs</span>
+                  <span className="navbar-brand js-scroll-trigger" style={{paddingTop: 5}} >Model-Figure</span>
                 </NavLink>
                 <button onClick={this.toggleMenu} className="navbar-toggler navbar-toggler-right" data-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"
                       value="Menu"><i className="fa fa-bars"></i>

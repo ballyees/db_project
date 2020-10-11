@@ -1,6 +1,9 @@
 import React from 'react'
 
 export default class HomeData extends React.Component{
+    constructor(props){
+        super(props)
+    }
     cardCompany(element){
         return (<div className="col-lg-12" style={{paddingBottom: 4}}>
                     <div className="card">
@@ -8,6 +11,7 @@ export default class HomeData extends React.Component{
                             <h5 className="card-title" style={{textAlign: "left"}}>companyName ..........</h5>
                             <hr/>
                             <p className="card-text">รับสมัครตำแหน่ง .... and detail</p>
+                            <p>{this.props.dataSearch}</p>
                             <hr/>
                             <h5 className="card-text" style={{textAlign: "right", color: "#33B5E5"}} >read more>></h5>
                         </div>

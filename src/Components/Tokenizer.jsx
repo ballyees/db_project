@@ -1,9 +1,9 @@
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import ConfigureTokenizer from './ConfigureTokenizer';
 export default class Tokenizer {
-    #username;
-    #token;
-    #type;
+    #username = '';
+    #token = '';
+    #type = '';
     #isLogin = false;
     
     constructor(name){
@@ -84,7 +84,7 @@ export default class Tokenizer {
         let response = await fetch(ConfigureTokenizer.proxyAnywhereAndUrlUserLogout, options).then(response => response)
         if (response.ok){
             this.setUserLogout()
-            console.log(this.toString())
+            // console.log(this.toString())
         }
         return response.ok
     }
