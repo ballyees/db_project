@@ -34,20 +34,21 @@ export default class Login extends React.Component{
     }
 
     SubmitBtn = async () => {
-        let success = await this.props.Tokenizer.Login(this.state.username, this.state.password)
-        if (success){
-            this.setState({
-                isSuccess: true
-            })
-            console.log('in login page', this.props.Tokenizer.isLogin)
-            this.props.callBack({isLoginSuccess: true, company: Boolean(this.state.company)})
-            if(this.state.rememberMe){
-                localStorage.setItem('isLogin', '1')
-            }else{
-                localStorage.setItem('isLogin', '0')
+        await this.props.Tokenizer.Login(this.state.username, this.state.password).then(success => {
+            if (success){
+                this.props.callBack({isLoginSuccess: true, company: Boolean(this.state.company)})
+                this.setState({
+                    isSuccess: true
+                })
+                if(this.state.rememberMe){
+                    localStorage.setItem('isLogin', '1')
+                }else{
+                    localStorage.setItem('isLogin', '0')
+                }
+                console.log(this.state)
             }
-            console.log(this.state)
-        }
+        })
+        
     }
 
     KeyPressEnter = e => {

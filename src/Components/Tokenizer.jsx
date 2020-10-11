@@ -1,10 +1,11 @@
+import { fas } from '@fortawesome/free-solid-svg-icons';
 import ConfigureTokenizer from './ConfigureTokenizer';
 export default class Tokenizer {
     #username;
     #token;
     #type;
     #isLogin = false;
-
+    
     constructor(name){
         this.name = name
     }
@@ -12,7 +13,6 @@ export default class Tokenizer {
         return this.#token
     }
     get isLogin(){
-        console.log('IN IS LOGIN')
         return this.#isLogin
     }
 
@@ -59,15 +59,14 @@ export default class Tokenizer {
             mode: 'cors',
             body: JSON.stringify(data)
         }
-        let response = await fetch(ConfigureTokenizer.proxyAnywhereAndUrlUserLogin, options).then(response => response)
-        if (response.ok){
-            response.json().then(data => {
-                this.setUserLogin(data)
-            })
-            
-        }
-        return response.ok
-        
+        return await fetch(ConfigureTokenizer.proxyAnywhereAndUrlUserLogin, options).then(response => {
+            if (response.ok){
+                response.json().then(data => {
+                    this.setUserLogin(data)
+                })
+            }
+            return response.ok
+        })
     }
 
     async Logout(){

@@ -7,12 +7,18 @@ import './Navbar.css'
 
 export default class Navbar extends Component{
     constructor(props) {
-      super();
+      // console.log('props nav:',props)
+      super(props);
       this.state = {
         menu: false,
-        dummy: false
+        dummy: false,
       };
       this.toggleMenu = this.toggleMenu.bind(this);
+    }
+    
+    componentWillUnmount(){
+      console.log('componentUpdate')
+      this.setState({dummy: !this.state.dummy})
     }
 
     async toggleMenu(e){
@@ -29,7 +35,7 @@ export default class Navbar extends Component{
       const show = (this.state.menu) ? "show" : ""
       let loginSuccess
       let company
-      console.log(this.props.Tokenizer.isLogin)
+      console.log(this.props.Tokenizer.isLogin);
       if (this.props.loginSuccess){
         if(true){
           company = (

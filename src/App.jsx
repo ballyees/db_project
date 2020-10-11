@@ -20,7 +20,7 @@ export default class App extends React.Component{
     if(localStorage.getItem('username') && localStorage.getItem('password')){
       // login api 
     }
-    
+
     this.state = {
       loginSuccess: isLogin,
       tokenizer: new Tokenizer('Tokenizer'),
@@ -35,9 +35,9 @@ export default class App extends React.Component{
   }
 
   changeLogin = (e) => {
-    this.setState({
+    this.setState((state, props) => ({
       loginSuccess: e.isLoginSuccess,
-    })
+    }))
   }
 
   renderLogin(){
@@ -58,9 +58,9 @@ export default class App extends React.Component{
     return (
       <Router>
           <div className="App">
-            <Route exact path="/find-jobs" render={(props) => <Home loginSuccess={this.state.loginSuccess} logout={this.Logout} Tokenizer={this.state.tokenizer} />} />
-            <Route exact path="/" render={(props) => <Home loginSuccess={this.state.loginSuccess} logout={this.Logout} Tokenizer={this.state.tokenizer} />} />
-            <Route exact path="/find-jobs/home" render={(props) => <Home loginSuccess={this.state.loginSuccess} logout={this.Logout} Tokenizer={this.state.tokenizer}/>} />
+            <Route exact path="/find-jobs" render={(props) => <Home loginSuccess={this.state.loginSuccess} logout={this.Logout} Tokenizer={this.state.tokenizer} state={this.state}/>} />
+            <Route exact path="/" render={(props) => <Home loginSuccess={this.state.loginSuccess} logout={this.Logout} Tokenizer={this.state.tokenizer} state={this.state} />} />
+            <Route exact path="/find-jobs/home" render={(props) => <Home loginSuccess={this.state.loginSuccess} logout={this.Logout} Tokenizer={this.state.tokenizer} state={this.state} />} />
             <Route exact path="/find-jobs/login" render={(props) => <Login loginSuccess={this.state.loginSuccess} Tokenizer={this.state.tokenizer} callBack={this.changeLogin} />} />
             <Route exact path="/find-jobs/register" render={(props) => <Register loginSuccess={this.state.loginSuccess} />} />
             <Route exact path="/find-jobs/data" render={(props) => (isLoginComponent)} />
