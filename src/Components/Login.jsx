@@ -38,7 +38,8 @@ export default class Login extends React.Component{
             if (success){
                 this.props.callBack({isLoginSuccess: true, company: Boolean(this.state.company)})
                 this.setState({
-                    isSuccess: true
+                    isSuccess: true,
+                    tokenizer: this.props.Tokenizer.getInstance()
                 })
                 if(this.state.rememberMe){
                     localStorage.setItem('isLogin', '1')

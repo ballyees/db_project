@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, Redirect } from 'react-router-dom';
 import { MDBBtn } from "mdbreact";
 import PostModals from './PostModals';
-import SearchModals from './SearchModals';
 import './Navbar.css'
 
 export default class Navbar extends Component{
@@ -18,7 +17,7 @@ export default class Navbar extends Component{
     async toggleMenu(e){
       this.setState({ menu: !this.state.menu })
       if(e !== undefined && e.target.name === 'logout'){
-        let success = await this.props.Tokenizer.Logout()
+        let success = await this.props.Tokenizer.setUserLogout()
         if (success){
           this.props.logout()
         }
@@ -29,7 +28,6 @@ export default class Navbar extends Component{
       const show = (this.state.menu) ? "show" : ""
       let loginSuccess
       let userType
-      console.log(this.props.Tokenizer.toString());
       if (this.props.loginSuccess){
         if(true){
           userType = (
@@ -44,6 +42,12 @@ export default class Navbar extends Component{
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
                 </li>
+                <li className="nav-item nav-link js-scroll-trigger" role="presentation">
+                  <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
+                </li>
+                <li className="nav-item nav-link js-scroll-trigger" role="presentation">
+                  <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
+                </li>
                 {userType}
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <Link to="/find-jobs/login"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="danger" onClick={this.toggleMenu} name="logout">Logout</MDBBtn></Link>
@@ -52,19 +56,19 @@ export default class Navbar extends Component{
           </div>
         )
       }else{
-        loginSuccess = (
-          <div className={"collapse navbar-collapse " + show} id="navbarResponsive">
-            <ul className="nav navbar-nav ml-auto">
-                <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-                  <Link to="/find-jobs/login"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu} >Sign in</span></Link>
-                </li>
-                <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-                  <Link to="/find-jobs/register"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="info" onClick={this.toggleMenu} >Sign Up</MDBBtn></Link>
-                  {/* <Link to="/register"><button type="button" className="btn action-button btn-primary" style={{borderRadius: "20px"}} onClick={this.toggleMenu}>Sign Up</button></Link> */}
-                </li>
-            </ul>
-          </div>
-        )
+        // loginSuccess = (
+        //   <div className={"collapse navbar-collapse " + show} id="navbarResponsive">
+        //     <ul className="nav navbar-nav ml-auto">
+        //         <li className="nav-item nav-link js-scroll-trigger" role="presentation">
+        //           <Link to="/find-jobs/login"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu} >Sign in</span></Link>
+        //         </li>
+        //         <li className="nav-item nav-link js-scroll-trigger" role="presentation">
+        //           <Link to="/find-jobs/register"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="info" onClick={this.toggleMenu} >Sign Up</MDBBtn></Link>
+        //         </li>
+        //     </ul>
+        //   </div>
+        // )
+        loginSuccess = (<Redirect to="/find-jobs/login" />)
       }
       return (
           <div className="Navbar">

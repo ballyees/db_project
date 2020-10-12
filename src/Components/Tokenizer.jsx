@@ -5,9 +5,13 @@ export default class Tokenizer {
     #token = '';
     #type = '';
     #isLogin = false;
+    static instance = null;
     
     constructor(name){
         this.name = name
+        if( Tokenizer.instance === null){
+            Tokenizer.instance = this
+        }
     }
     get token(){
         return this.#token
@@ -23,7 +27,12 @@ export default class Tokenizer {
     toString(){
         return `${this.#username} :: ${this.#type} :: ${this.#token} :: ${this.#isLogin}`
     }
-
+    getInstance(){
+        if( Tokenizer.instance === null){
+            Tokenizer.instance = this
+        }
+        return Tokenizer.instance
+    }
     setUserLogout(){
         this.#username = ''
         this.#token = ''
@@ -68,24 +77,7 @@ export default class Tokenizer {
             return response.ok
         })
     }
-
-    async Logout(){
-        let headers = {
-            "Content-Type": 'application/json',
-            "Content-Length": 0
-        }
-        headers[ConfigureTokenizer.keyTokenHeader] = this.#token
-        headers[ConfigureTokenizer.keyRequestHeaderLogoutType] = this.#type
-        let options = {
-            method: 'POST',
-            headers: headers,
-            mode: 'cors',
-        }
-        let response = await fetch(ConfigureTokenizer.proxyAnywhereAndUrlUserLogout, options).then(response => response)
-        if (response.ok){
-            this.setUserLogout()
-            // console.log(this.toString())
-        }
-        return response.ok
+    async getProducts(){
+        return await fetch(ConfigureTokenizer.proxyAnywhereAndUrlProducts).then(response => response.json()).then(data => data[ConfigureTokenizer.keyResponseData])
     }
 }

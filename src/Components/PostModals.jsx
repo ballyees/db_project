@@ -66,7 +66,7 @@ export default class PostModals extends React.Component{
         }
         return (
             <MDBContainer className="justify-content-center">
-                <MDBBtn onClick={this.toggle} outline color="secondary" style={{borderRadius: "20px", textAlign: "center"}}>Post</MDBBtn>
+                <MDBBtn onClick={this.toggle} outline color="secondary" style={{borderRadius: "20px", textAlign: "center"}}>new Post</MDBBtn>
                 <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
                 <MDBModalHeader toggle={this.toggle} style={{color: "rgb(0, 0, 0)"}}></MDBModalHeader>
                 <MDBModalBody>

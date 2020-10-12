@@ -8,15 +8,16 @@ export default class App extends React.Component{
         }
     }
 
-    async componentDidMount(){
-      await fetch('https://work-final.herokuapp.com/transactions').then(
+    componentDidMount(){
+        let fetch_data = async () => await fetch('https://work-final.herokuapp.com/transactions').then(
           result => result.json()
-      ).then(
+            ).then(
           data => {
               this.setState({f: data})
               console.log(data)
-        }
-      )
+            }
+        )
+        fetch_data()
   }
 
   render(){

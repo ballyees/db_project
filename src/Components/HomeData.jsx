@@ -2,7 +2,10 @@ import React from 'react'
 
 export default class HomeData extends React.Component{
     constructor(props){
-        super(props)
+        super(props);
+        this.state = {
+            data: []
+        };
     }
     cardCompany(element){
         return (<div className="col-lg-12" style={{paddingBottom: 4}}>
