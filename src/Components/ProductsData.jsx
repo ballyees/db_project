@@ -6,7 +6,6 @@ import LoadingPage from './LoadingPage';
 export default class ProductsData extends React.Component {
     constructor(props) {
         super(props);
-        this.searchRef = React.createRef()
         this.state = {
             data: [],
             options: [],
@@ -21,12 +20,13 @@ export default class ProductsData extends React.Component {
         this.setState(prevState => ({
             collapseID: prevState.collapseID !== collapseID ? collapseID : ""
         }));
+        console.log(this.state.collapseID)
     }
 
     componentDidMount() {
         let fetch_data = async () => await this.props.Tokenizer.getProducts().then(
             data => {
-                this.setState({ data: data, isLoading: false })
+                this.setState({ data: data , isLoading: false })
                 console.log(data)
             }
         )
@@ -35,7 +35,7 @@ export default class ProductsData extends React.Component {
 
     onChange = e => {
         const { name, value } = e.target
-        console.log(name + " " + value)
+        console.log(name, value)
         this.setState({
             [name]: value
         })
@@ -46,14 +46,11 @@ export default class ProductsData extends React.Component {
     }
 
     onClickReset = () => {
-        this.searchRef.current.state.innerValue = ""
         this.setState({
             search: "",
             collapseID: "",
             optionsFilter: "productName"
         })
-        
-        console.log(this.state.collapseID, this.state.optionsFilter, this.state.search)
     }
 
     mapData(data) {
@@ -69,34 +66,34 @@ export default class ProductsData extends React.Component {
                     <MDBCollapse id={data["productCode"]} isOpen={this.state.collapseID}>
                         <div className="card">
                             <div className="card-body">
-                                    <p className="card-text text-left" style={{fontSize: "16px"}}>
-                                    Price : {data["buyPrice"]} <br/>
-                                    Product Line : {data["productLine"]} <br/>
-                                    MSRP : {data["MSRP"]} <br/>
-                                    Scale: {data["productScale"]} <br/>
-                                    Vendor: {data["productVendor"]} <br/>
-                                    Product Description : {data["productDescription"]} <br/>
-                                    </p>
-                                <h5 className="card-text" style={{ textAlign: "right", color: "#33B5E5" }} >read more>></h5>
+                                <p className="card-text text-left" style={{fontSize: "16px"}}>
+                                Price : {data["buyPrice"]} <br/>
+                                Product Line : {data["productLine"]} <br/>
+                                MSRP : {data["MSRP"]} <br/>
+                                Scale: {data["productScale"]} <br/>
+                                Vendor: {data["productVendor"]} <br/>
+                                Product Description : {data["productDescription"]} <br/>
+                                </p>
+                                <hr/>
+                                <MDBContainer>
+                                    <MDBRow>
+                                        <MDBCol sm="4">
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="info" onClick={this.onClickReset} name="add">add to cart</MDBBtn>
+                                        </MDBCol>
+                                        <MDBCol sm="4">
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="warning" onClick={this.onClickReset} name="edit">edit</MDBBtn>
+                                        </MDBCol>
+                                        <MDBCol sm="4">
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="danger" onClick={this.onClickReset} name="delete">delete</MDBBtn>
+                                        </MDBCol>
+                                    </MDBRow>
+                                </MDBContainer>
                             </div>
                         </div>
+                        
                     </MDBCollapse>
                 </div>
             </div>)
-    }
-
-    cardJobseeker(element) {
-        return (<div className="col-lg-12" style={{ paddingBottom: 4 }}>
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title" style={{ textAlign: "left" }}>Name ..........</h5>
-                    <hr />
-                    <p className="card-text">detail อะไรสักอย่างนี่แหละ</p>
-                    <hr />
-                    <h5 className="card-text" style={{ textAlign: "right", color: "#33B5E5" }} >read more>></h5>
-                </div>
-            </div>
-        </div>)
     }
 
     render() {
@@ -110,7 +107,7 @@ export default class ProductsData extends React.Component {
                                     <MDBContainer>
                                         <MDBRow>
                                             <MDBCol sm="7">
-                                                <MDBInput label="Search" outline name="search" onChange={this.onChange} ref={this.searchRef} />
+                                                <MDBInput label="Search" outline name="search" onChange={this.onChange} value={this.state.search} />
                                             </MDBCol>
                                             <MDBCol sm="3" style={{ padding: "24px" }}>
                                                 <select className="browser-default custom-select" name="optionsFilter" onChange={this.onChange} value={this.state.optionsFilter} >
