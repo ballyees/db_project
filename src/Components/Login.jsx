@@ -20,7 +20,7 @@ export default class Login extends React.Component{
 
     onChange = e => {
         const { name, value } = e.target
-        console.log(name + " " + value)
+        // console.log(name + " " + value)
         if(name === 'rememberMe'){
             this.setState({
                 [name]: this.refs.rememberMe.checked
@@ -46,7 +46,7 @@ export default class Login extends React.Component{
                 }else{
                     localStorage.setItem('isLogin', '0')
                 }
-                console.log(this.state)
+                // console.log(this.state)
             }
         })
         
@@ -76,10 +76,10 @@ export default class Login extends React.Component{
                                                 <div className="user">
                                                     <MDBInput label="username" outline name="username" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                                     <MDBInput type="password" label="Password" outline name="password" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
-                                                    <div className="custom-control custom-checkbox" style={{paddingBottom: "4%", textAlign: "left"}}>
+                                                    {/* <div className="custom-control custom-checkbox" style={{paddingBottom: "4%", textAlign: "left"}}>
                                                         <input type="checkbox" className="custom-control-input" id="rememberMe" name="rememberMe" onChange={this.onChange} ref="rememberMe" />
                                                         <label className="custom-control-label" htmlFor="rememberMe">Remember Me</label>
-                                                    </div>
+                                                    </div> */}
                                                     <button className="btn btn-info btn-block text-white btn-user" id="submit-btn" type="submit" style={{borderRadius: "20px"}} onClick={this.SubmitBtn}>SIGN IN</button>
                                                 </div>
                                                 {this.state.isSuccess?<Redirect to="/find-jobs/home" />:<div></div>}

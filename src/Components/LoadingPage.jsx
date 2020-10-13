@@ -1,5 +1,4 @@
 import React from "react";
-import { MDBIcon } from 'mdbreact'
 
 export default class LoadingPage extends React.Component {
     state = {
@@ -20,18 +19,6 @@ export default class LoadingPage extends React.Component {
         clearInterval(this.interval);
     }
     render() {
-        // return (
-        //     <div style={{position: "relative"}}>
-        //         <p style={{position: "absolute", paddingTop: "20%", left: "43%"}}>
-        //             <MDBIcon icon="spinner" pulse size="4x" fixed style={{color: this.getColors(this.state.counter)}} />
-        //                 <span className="sr-only">Loading...</span>
-        //             <MDBIcon icon="spinner" pulse size="4x" fixed style={{color: this.getColors(this.state.counter+1)}} />
-        //                 <span className="sr-only">Loading...</span>
-        //             <MDBIcon icon="spinner" pulse size="4x" fixed style={{color: this.getColors(this.state.counter+2)}} />
-        //                 <span className="sr-only">Loading...</span>
-        //         </p>
-        //     </div>
-        // );
         return (
             <>
                 <div className="spinner-grow ml-3" role="status" style={{animationDelay: 1, backgroundColor: this.getColors(this.state.counter)}}>

@@ -1,4 +1,3 @@
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import ConfigureTokenizer from './ConfigureTokenizer';
 export default class Tokenizer {
     #username = '';
@@ -46,7 +45,7 @@ export default class Tokenizer {
         this.#token = data[ConfigureTokenizer.keyTokenHeader]
         this.#type = data[ConfigureTokenizer.keyResponseData][0].type
         this.#isLogin = true
-        console.log(this.toString())
+        // console.log(this.toString())
     }
 
     async setRefershtoken(response){

@@ -2,7 +2,6 @@ import React from 'react'
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCollapse, MDBBtn } from "mdbreact";
 import LoadingPage from './LoadingPage';
 
-
 export default class ProductsData extends React.Component {
     constructor(props) {
         super(props);
@@ -45,6 +44,25 @@ export default class ProductsData extends React.Component {
         return this.state.search.length < 2 || Boolean(data[this.state.optionsFilter].toUpperCase().match(this.state.search.toUpperCase()))
     }
 
+    onClickEdit = () => {
+
+    }
+
+    onClickDelete = () => {
+        let filter = (data) => !(data["productCode"] === this.state.collapseID)
+        this.setState(prevState => ({
+            data: prevState.data.filter(d => filter(d)),
+            collapseID: ""
+        }))
+    }
+
+    onClickAdd = () => {
+        let index = this.state.data.findIndex(d => d["productCode"] === this.state.collapseID)
+        if (Boolean(~index)){
+            this.props.addToCart({...this.state.data[index]})
+        }
+    }
+
     onClickReset = () => {
         this.setState({
             search: "",
@@ -78,13 +96,13 @@ export default class ProductsData extends React.Component {
                                 <MDBContainer>
                                     <MDBRow>
                                         <MDBCol sm="4">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="info" onClick={this.onClickReset} name="add">add to cart</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="info" onClick={this.onClickAdd} name="add">add to cart</MDBBtn>
                                         </MDBCol>
                                         <MDBCol sm="4">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="warning" onClick={this.onClickReset} name="edit">edit</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
                                         </MDBCol>
                                         <MDBCol sm="4">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="danger" onClick={this.onClickReset} name="delete">delete</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBContainer>
