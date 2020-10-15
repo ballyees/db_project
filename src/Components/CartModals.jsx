@@ -7,7 +7,6 @@ export default class CartModals extends React.Component{
         super(props)
         this.state = {
             modal: false,
-            roleSize: 1,
             cart: [],
             productKey: {}
         }
@@ -21,7 +20,6 @@ export default class CartModals extends React.Component{
         if(e === undefined || e.target.name === 'close'){
             this.setState({
                 modal: false,
-                roleSize: 1,
             })
         }else if(e.target.name === 'submit'){
             this.SubmitBtn(e)
@@ -34,7 +32,7 @@ export default class CartModals extends React.Component{
             let totalNumber = 0
             for (let i=0; i < this.props.cart.length; i++ ){
                 let val = parseInt(this.props.cart[i]["value"])
-                totalPrice += val * parseInt(this.props.cart[i]["buyPrice"])
+                totalPrice += val * parseFloat(this.props.cart[i]["buyPrice"]).toFixed(2)
                 totalNumber += val
             }
             return (
@@ -45,7 +43,7 @@ export default class CartModals extends React.Component{
                             <p style={{ padding: 30, margin: 0 }} >Total price: </p>
                         </div>
                         <div className="col col-md-2 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                            <p style={{ padding: 30, margin: 0 }} >[{totalPrice}]</p>
+                            <p style={{ padding: 30, margin: 0 }} >[{totalPrice.toFixed(2)}]</p>
                         </div>
                         <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                             <p style={{ padding: 30, margin: 0 }} >{totalNumber}</p>
@@ -95,7 +93,7 @@ export default class CartModals extends React.Component{
                     <p style={{ padding: 30, margin: 0 }} >[{data["buyPrice"]}]</p>
                 </div>
                 <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                    <MDBInput label="value" outline name={data["productCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" value={String(this.state.productKey[data["productCode"]])} min={0} />
+                    <MDBInput label="value" outline name={data["productCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" value={String(this.state.productKey[data["productCode"]])} min={0} max={data["quantityInStock"]}/>
                 </div>
                 {/* <hr className="my-2" /> */}
             </div>)
@@ -110,13 +108,18 @@ export default class CartModals extends React.Component{
             }else if(value.length > 1 && value.startsWith("0")){
                 val = parseInt(value.substring(1))
             }
-            this.props.fn.onChangeCartValue(name, val)
+            let index = this.state.cart.findIndex(d => name === d["productCode"])
+            
+            if (val >= this.state.cart[index]["quantityInStock"]){
+                val = this.state.cart[index]["quantityInStock"]
+            }
             this.setState(prevState => ({
                 productKey: {...prevState.productKey, ...{[name]: val}},
                 [name]: val
             }))
-        }
-        else{
+            this.props.fn.onChangeCartValue(name, val)
+            console.log(val)    
+        }else{
             this.setState({
                 [name]: value
             })   

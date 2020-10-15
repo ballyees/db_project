@@ -1,6 +1,7 @@
 import React from 'react'
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCollapse, MDBBtn } from "mdbreact";
 import LoadingPage from './LoadingPage';
+import EditModals from './EditModals';
 
 export default class ProductsData extends React.Component {
     constructor(props) {
@@ -11,8 +12,16 @@ export default class ProductsData extends React.Component {
             collapseID: "",
             isLoading: true,
             optionsFilter: "productName",
-            search : ""
+            search : "",
+            modalsEdit: false,
+            dataForModals: {}
         };
+    }
+
+    toggleModal(){
+        this.setState(prevState => ({
+            modalsEdit: !prevState.modalsEdit
+        }))
     }
 
     toggleCollapse = collapseID => () => {
@@ -45,7 +54,13 @@ export default class ProductsData extends React.Component {
     }
 
     onClickEdit = () => {
-
+        let index = this.state.data.findIndex(d => d["productCode"] === this.state.collapseID)
+        if (Boolean(~index)){
+            this.setState(prevState => ({
+                modalsEdit: !prevState.modalsEdit,
+                dataForModals: {...this.state.data[index]}
+            }))
+        }
     }
 
     onClickDelete = () => {
@@ -142,6 +157,7 @@ export default class ProductsData extends React.Component {
                                     </MDBContainer>
                                 </h4>
                                 {this.state.data.filter(data => this.filterData(data)).map( data => (this.mapData(data)))}
+                                {this.state.modalsEdit?<EditModals type="product" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} />:<></>}
                             </div>
                         </div>
                     </div>
