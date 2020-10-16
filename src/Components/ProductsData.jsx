@@ -14,7 +14,8 @@ export default class ProductsData extends React.Component {
             optionsFilter: "productName",
             search : "",
             modalsEdit: false,
-            dataForModals: {}
+            dataForModals: {},
+            keysData: ["productCode", "productName", "productLine", "productScale", "productVendor", "productDescription", "quantityInStock", "buyPrice", "MSRP"]
         };
     }
 
@@ -35,7 +36,7 @@ export default class ProductsData extends React.Component {
         let fetch_data = async () => await this.props.Tokenizer.getProducts().then(
             data => {
                 this.setState({ data: data , isLoading: false })
-                console.log(data)
+                console.log(Object.keys(data[0]))
             }
         )
         fetch_data()
@@ -44,13 +45,28 @@ export default class ProductsData extends React.Component {
     onChange = e => {
         const { name, value } = e.target
         console.log(name, value)
-        this.setState({
-            [name]: value
-        })
+        if (!Boolean(value.match(/[*+\-?^${}()|[\]\\]/g))){
+            this.setState({
+                [name]: value
+            })
+        }else{
+            this.setState(prevState => ({
+                [name]: prevState[name]
+            }))
+        }
     }
 
     filterData = (data) => {
-        return this.state.search.length < 2 || Boolean(data[this.state.optionsFilter].toUpperCase().match(this.state.search.toUpperCase()))
+        if (this.state.search.length < 2){
+            return true
+        }else{
+            let allS = ''
+            for (let i=0; i < this.state.keysData.length; i++){
+                allS += data[this.state.keysData[i]].toUpperCase() + ' '
+            }
+            return Boolean(allS.match(this.state.search.toUpperCase()))
+        }
+        // return this.state.search.length < 2 || Boolean(data[this.state.optionsFilter].toUpperCase().match(this.state.search.toUpperCase()))
     }
 
     onClickEdit = () => {
@@ -84,6 +100,12 @@ export default class ProductsData extends React.Component {
             collapseID: "",
             optionsFilter: "productName"
         })
+    }
+
+    onPressEnter = e =>{
+        if (e.key === 'Enter' || e.keyCode === 13){
+            e.preventDefault()
+        }
     }
 
     mapData(data) {
@@ -140,7 +162,7 @@ export default class ProductsData extends React.Component {
                                     <MDBContainer>
                                         <MDBRow>
                                             <MDBCol sm="7">
-                                                <MDBInput label="Search" outline name="search" onChange={this.onChange} value={this.state.search} />
+                                                <MDBInput label="Search" outline name="search" onChange={this.onChange} onKeyUp={this.onPressEnter} value={this.state.search} />
                                             </MDBCol>
                                             <MDBCol sm="3" style={{ padding: "24px" }}>
                                                 <select className="browser-default custom-select" name="optionsFilter" onChange={this.onChange} value={this.state.optionsFilter} >

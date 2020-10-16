@@ -2,26 +2,21 @@ import React from 'react'
 import { MDBContainer, MDBJumbotron, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import Style from 'style-it'
 
-export default class EditModals extends React.Component {
+export default class AddType extends React.Component {
     constructor(props) {
         super(props)
         this.state = ({
-            ...{
-                modal: false,
-                type: props.type, //customer, product, employee
-            }, ...props.data
+            modal: false,
+            type: props.type, //customer, product, employee
+            [props.type]: {},
         })
-        console.log("props con:", props, this.state)
     }
 
     onChange = e => {
         const { name, value } = e.target
-        // this.setState(prevState =>({
-        //     [prevState.type]: { ...prevState[prevState.type], ...{[name]: value}}
-        // }))
-        this.setState({
-            [name]: value
-        })
+        this.setState(prevState =>({
+            [prevState.type]: { ...prevState[prevState.type], ...{[name]: value}}
+        }))
     }
 
     SubmitBtn(e) {
@@ -53,7 +48,6 @@ export default class EditModals extends React.Component {
                         </MDBModal>
                     </div>
                 )
-            
             case "employee":
                 return null
             case "customer":
