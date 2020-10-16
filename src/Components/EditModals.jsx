@@ -14,6 +14,10 @@ export default class EditModals extends React.Component {
         console.log("props con:", props, this.state)
     }
 
+    onSubmit = e => {
+        this.props.toggle()
+    }
+
     onChange = e => {
         const { name, value } = e.target
         // this.setState(prevState =>({
@@ -42,7 +46,7 @@ export default class EditModals extends React.Component {
                                         {this.props.data["productCode"]}
                                         <hr className="my-2" />
                                         <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
-                                            <MDBBtn name="submit" onClick={this.props.toggle} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                            <MDBBtn name="submit" onClick={this.onSubmit} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
                                         </Style>
                                         <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
                                             <MDBBtn color="secondary" name="close" onClick={this.props.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>

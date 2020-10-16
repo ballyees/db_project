@@ -15,7 +15,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 export default class App extends React.Component {
   constructor(props) {
     super(props)
-    let isLogin = false
+    let isLogin = true
     if (localStorage.getItem('username') && localStorage.getItem('password')) {
       // login api 
     }

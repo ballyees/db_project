@@ -36,7 +36,7 @@ export default class ProductsData extends React.Component {
         let fetch_data = async () => await this.props.Tokenizer.getProducts().then(
             data => {
                 this.setState({ data: data , isLoading: false })
-                console.log(Object.keys(data[0]))
+                // console.log(Object.keys(data[0]))
             }
         )
         fetch_data()
@@ -103,6 +103,7 @@ export default class ProductsData extends React.Component {
     }
 
     onPressEnter = e =>{
+        console.log(e.key)
         if (e.key === 'Enter' || e.keyCode === 13){
             e.preventDefault()
         }

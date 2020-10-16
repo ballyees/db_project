@@ -3,6 +3,7 @@ import { NavLink, Link, Redirect } from 'react-router-dom';
 import { MDBBtn } from "mdbreact";
 import PostModals from './PostModals';
 import CartModals from './CartModals';
+import AddType from './AddType';
 import './Navbar.css'
 
 export default class Navbar extends Component{
@@ -11,6 +12,7 @@ export default class Navbar extends Component{
       this.state = {
         menu: false,
         dummy: false,
+        addTypeModals: false,
       };
       this.toggleMenu = this.toggleMenu.bind(this);
     }
@@ -24,6 +26,13 @@ export default class Navbar extends Component{
         }
       }
     }
+
+    toggleAddTypeModals = (e) => {
+      this.setState(prevState => ({
+        addTypeModals: !prevState.addTypeModals
+      }))
+    }
+
 
     render(){
       const show = (this.state.menu) ? "show" : ""
@@ -47,7 +56,9 @@ export default class Navbar extends Component{
                   <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-                  <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
+                  <span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleAddTypeModals}>Add</span>
+                  <AddType type="product" open={this.state.addTypeModals} toggle={this.toggleAddTypeModals.bind(this)} />
+                  {/* <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link> */}
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <CartModals onClickP2C={this.toggleMenu} style={{borderRadius: "20px"}} cart={this.props.cart} fn={this.props.fn} state={this.props.state} onChangeCartValue={this.props.onChangeCartValue} />
