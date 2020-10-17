@@ -57,7 +57,7 @@ export default class Navbar extends Component{
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleAddTypeModals}>Add</span>
-                  <AddType type="product" open={this.state.addTypeModals} toggle={this.toggleAddTypeModals.bind(this)} />
+                  {this.state.addTypeModals?<AddType type="product" open={this.state.addTypeModals} toggle={this.toggleAddTypeModals.bind(this)} /> : <></>}
                   {/* <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link> */}
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">

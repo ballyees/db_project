@@ -23,9 +23,13 @@ export default class AddType extends React.Component {
             [prevState.type]: { ...prevState[prevState.type], ...{ [name]: value } }
         }))
     }
+    
+    componentDidMount(){
+
+    }
 
     onPressEnter = e => {
-        console.log(e.key)
+        // console.log(e.key)
         if (e.key === 'Enter' || e.keyCode === 13) {
             e.preventDefault()
         }

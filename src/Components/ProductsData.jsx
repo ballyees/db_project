@@ -11,7 +11,6 @@ export default class ProductsData extends React.Component {
             options: [],
             collapseID: "",
             isLoading: true,
-            optionsFilter: "productName",
             search : "",
             modalsEdit: false,
             dataForModals: {},
@@ -44,7 +43,7 @@ export default class ProductsData extends React.Component {
 
     onChange = e => {
         const { name, value } = e.target
-        console.log(name, value)
+        // console.log(name, value)
         if (!Boolean(value.match(/[*+\-?^${}()|[\]\\]/g))){
             this.setState({
                 [name]: value
@@ -66,7 +65,6 @@ export default class ProductsData extends React.Component {
             }
             return Boolean(allS.match(this.state.search.toUpperCase()))
         }
-        // return this.state.search.length < 2 || Boolean(data[this.state.optionsFilter].toUpperCase().match(this.state.search.toUpperCase()))
     }
 
     onClickEdit = () => {
@@ -98,12 +96,10 @@ export default class ProductsData extends React.Component {
         this.setState({
             search: "",
             collapseID: "",
-            optionsFilter: "productName"
         })
     }
 
     onPressEnter = e =>{
-        console.log(e.key)
         if (e.key === 'Enter' || e.keyCode === 13){
             e.preventDefault()
         }
@@ -162,18 +158,10 @@ export default class ProductsData extends React.Component {
                                 <h4 className="card-title">
                                     <MDBContainer>
                                         <MDBRow>
-                                            <MDBCol sm="7">
+                                            <MDBCol sm="8">
                                                 <MDBInput label="Search" outline name="search" onChange={this.onChange} onKeyUp={this.onPressEnter} value={this.state.search} />
                                             </MDBCol>
-                                            <MDBCol sm="3" style={{ padding: "24px" }}>
-                                                <select className="browser-default custom-select" name="optionsFilter" onChange={this.onChange} value={this.state.optionsFilter} >
-                                                    <option value="productName">Product Name</option>
-                                                    <option value="productLine">Product Line</option>
-                                                    <option value="productCode">Product Code</option>
-                                                    <option value="productVendor">Product Vendor</option>
-                                                </select>
-                                            </MDBCol>
-                                            <MDBCol sm="2" style={{ padding: "15px" }}>
+                                            <MDBCol sm="4" style={{ padding: "15px" }}>
                                                 <MDBBtn type="button" style={{borderRadius: "20px"}} outline color="danger" onClick={this.onClickReset} name="reset">Reset</MDBBtn>
                                             </MDBCol>
                                         </MDBRow>
