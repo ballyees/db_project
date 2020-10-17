@@ -13,6 +13,7 @@ export default class Navbar extends Component{
         menu: false,
         dummy: false,
         addTypeModals: false,
+        typeModal: ''
       };
       this.toggleMenu = this.toggleMenu.bind(this);
     }
@@ -27,9 +28,11 @@ export default class Navbar extends Component{
       }
     }
 
-    toggleAddTypeModals = (e) => {
+    toggleAddTypeModals = (name) => {
+      // console.log(name, this.state.addTypeModals)
       this.setState(prevState => ({
-        addTypeModals: !prevState.addTypeModals
+        addTypeModals: !prevState.addTypeModals,
+        typeModal: (prevState.typeModal !== '')?"":name
       }))
     }
 
@@ -56,9 +59,11 @@ export default class Navbar extends Component{
                   <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link>
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-                  <span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleAddTypeModals}>Add</span>
-                  {this.state.addTypeModals?<AddType type="product" open={this.state.addTypeModals} toggle={this.toggleAddTypeModals.bind(this)} /> : <></>}
+                  <span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={(e) => this.toggleAddTypeModals("product")} >Add pro</span>
                   {/* <Link to="/find-jobs/profile"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu}>Profile</span></Link> */}
+                </li>
+                <li className="nav-item nav-link js-scroll-trigger" role="presentation">
+                  <span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={(e) => this.toggleAddTypeModals("customer")} >Add cus</span>
                 </li>
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <CartModals onClickP2C={this.toggleMenu} style={{borderRadius: "20px"}} cart={this.props.cart} fn={this.props.fn} state={this.props.state} onChangeCartValue={this.props.onChangeCartValue} />
@@ -67,22 +72,11 @@ export default class Navbar extends Component{
                 <li className="nav-item nav-link js-scroll-trigger" role="presentation">
                   <Link to="/find-jobs/login"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="danger" onClick={this.toggleMenu} name="logout">Logout</MDBBtn></Link>
                 </li>
+                
             </ul>
           </div>
         )
       }else{
-        // loginSuccess = (
-        //   <div className={"collapse navbar-collapse " + show} id="navbarResponsive">
-        //     <ul className="nav navbar-nav ml-auto">
-        //         <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-        //           <Link to="/find-jobs/login"><span className="nav-link active js-scroll-trigger" style={{paddingTop: 18}} onClick={this.toggleMenu} >Sign in</span></Link>
-        //         </li>
-        //         <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-        //           <Link to="/find-jobs/register"><MDBBtn type="button" style={{borderRadius: "20px"}} outline color="info" onClick={this.toggleMenu} >Sign Up</MDBBtn></Link>
-        //         </li>
-        //     </ul>
-        //   </div>
-        // )
         loginSuccess = (<Redirect to="/find-jobs/login" />)
       }
       return (
@@ -96,6 +90,7 @@ export default class Navbar extends Component{
                       value="Menu"><i className="fa fa-bars"></i>
                 </button>
                 {loginSuccess}
+                {this.state.addTypeModals?<AddType type={this.state.typeModal} open={this.state.addTypeModals} toggle={this.toggleAddTypeModals.bind(this)} /> : <></>}
               </div>
           </nav>
           </div>
