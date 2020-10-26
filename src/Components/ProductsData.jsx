@@ -60,7 +60,7 @@ export default class ProductsData extends React.Component {
         }else{
             let allS = ''
             for (let i=0; i < this.state.keysData.length; i++){
-                allS += String(data[this.state.keysData[i]]).toUpperCase() + ' '
+                allS += data[this.state.keysData[i]] ? String(data[this.state.keysData[i]]).toUpperCase() + ' ' : ''
             }
             return Boolean(allS.match(this.state.search.toUpperCase()))
         }
