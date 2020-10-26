@@ -100,4 +100,8 @@ export default class Connector {
     async deleteCustomer(customerNumber){
         return null
     }
+
+    async getEmployees(){
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlEmployees).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
+    }
 }

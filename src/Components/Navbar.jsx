@@ -65,29 +65,37 @@ export default class Navbar extends Component {
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               <Link to="/find-jobs/customers" ><span className="nav-link active js-scroll-trigger" style={{ paddingTop: 18 }} onClick={this.toggleMenu}>Customers</span></Link>
             </li>
-            {/* <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-              <span className="nav-link active js-scroll-trigger" style={{ paddingTop: 18 }} onClick={(e) => this.toggleAddTypeModals("product")} >Add pro</span>
-            </li>
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-              <span className="nav-link active js-scroll-trigger" style={{ paddingTop: 18 }} onClick={(e) => this.toggleAddTypeModals("customer")} >Add cus</span>
-            </li> */}
+              <MDBDropdown>
+                <MDBDropdownToggle color="primary" outline style={{ borderRadius: "20px" }} >
+                  menus
+                  </MDBDropdownToggle>
+                <MDBDropdownMenu basic>
+                  <MDBDropdownItem><Link to="/find-jobs/products" style={{display: "inline"}} ><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={this.toggleMenu}>Products</span></Link></MDBDropdownItem>
+                  <MDBDropdownItem divider />
+                  <MDBDropdownItem><Link to="/find-jobs/customers" style={{display: "inline"}} ><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={this.toggleMenu}>Customers</span></Link></MDBDropdownItem>
+                  <MDBDropdownItem divider />
+                  <MDBDropdownItem><Link to="/find-jobs/employees" style={{display: "inline"}} ><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={this.toggleMenu}>Employees</span></Link></MDBDropdownItem>
+                </MDBDropdownMenu>
+              </MDBDropdown>
+            </li>
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               <MDBDropdown>
                 <MDBDropdownToggle color="primary" outline style={{ borderRadius: "20px" }} >
                   Add menus
                   </MDBDropdownToggle>
                 <MDBDropdownMenu basic>
-                  <MDBDropdownItem><span className="nav-link active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddTypeModals("product")} >Add Product</span></MDBDropdownItem>
+                  <MDBDropdownItem><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddTypeModals("product")} >Add Product</span></MDBDropdownItem>
                   <MDBDropdownItem divider />
-                  <MDBDropdownItem><span className="nav-link active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddTypeModals("customer")} >Add Customer</span></MDBDropdownItem>
+                  <MDBDropdownItem><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddTypeModals("customer")} >Add Customer</span></MDBDropdownItem>
                   <MDBDropdownItem divider />
-                  <MDBDropdownItem><span className="nav-link active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddTypeModals("employee")} >Add Employee</span></MDBDropdownItem>
+                  <MDBDropdownItem><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddTypeModals("employee")} >Add Employee</span></MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </li>
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               {this.state.cartModals ?
-                <CartModals open={this.state.cartModals} toggle={this.toggleCart} style={{ borderRadius: "20px" }} cart={this.props.cart} fn={this.props.fn} state={this.props.state} onChangeCartValue={this.props.onChangeCartValue} />
+                <CartModals open={this.state.cartModals} toggle={this.toggleCart} style={{ borderRadius: "20px" }} />
                 :
                 <MDBBtn onClick={this.toggleCart} outline color="secondary" style={{ borderRadius: "20px", textAlign: "" }} name="cart">cart</MDBBtn>
               }

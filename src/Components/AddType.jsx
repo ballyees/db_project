@@ -140,7 +140,7 @@ export default class AddType extends React.Component {
                                         </div>
                                         <hr className="my-2" />
                                         <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
-                                            <MDBBtn name="submit" onClick={this.onSubmit} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                            <MDBBtn name="submit" onClick={this.onSubmit} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit" >Submit</MDBBtn>
                                         </Style>
                                         <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
                                             <MDBBtn color="secondary" name="close" onClick={this.props.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>

@@ -45,10 +45,10 @@ export default class CartModals extends React.Component {
                 <div>
                     <hr className="my-2" />
                     <div className="row" key="totalPrice">
-                        <div className="col col-md-7 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                        <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
                             <p style={{ padding: 30, margin: 0 }} >Total price: </p>
                         </div>
-                        <div className="col col-md-2 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                        <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                             <p style={{ padding: 30, margin: 0 }} >[{totalPrice.toFixed(2)}]</p>
                         </div>
                         <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
@@ -60,14 +60,14 @@ export default class CartModals extends React.Component {
                     <>
                         <hr className="my-2" />
                         <div className="row" key="Balance">
-                            <div className="col col-md-7 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
                                 <p style={{ padding: 30, margin: 0 }} >Balance Credit: </p>
                             </div>
-                            <div className="col col-md-2 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                            <p style={{ padding: 30, margin: 0 }} ></p>
+                            <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <p style={{ padding: 30, margin: 0 }} >[{(this.state.cartCustomer["creditLimit"] - totalPrice).toFixed(2)}]</p>
                             </div>
                             <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                                <p style={{ padding: 30, margin: 0 }} >{(this.state.cartCustomer["creditLimit"] - totalPrice).toFixed(2)}</p>
+                                <p style={{ padding: 30, margin: 0 }} >{(this.state.cartCustomer["creditLimit"]).toFixed(2)}</p>
                             </div>
                         </div>
                     </>
@@ -110,10 +110,10 @@ export default class CartModals extends React.Component {
     mapData(data) {
         return (
             <div className="row" key={data["productCode"]}>
-                <div className="col col-md-7 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
                     <p style={{ padding: 30, margin: 0 }} >[{data["productCode"]}] {data["productName"]}</p>
                 </div>
-                <div className="col col-md-2 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                     <p style={{ padding: 30, margin: 0 }} >[{data["buyPrice"]}]</p>
                 </div>
                 <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >

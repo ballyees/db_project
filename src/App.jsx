@@ -9,6 +9,7 @@ import Products from './Components/Products';
 import Register from './Components/Register';
 import Data from './Components/Data';
 import Customers from './Components/Customers';
+import Employees from './Components/Employees';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
@@ -20,12 +21,12 @@ export default class App extends React.Component {
       window.$Connector.Login(localStorage.getItem('username'), localStorage.getItem('password'))
     }
 
-    console.log(window.$Connector, 'have connector')
+    // console.log(window.$Connector, 'have connector')
     this.state = {
       loginSuccess: isLogin,
       cart: []
     }
-    console.log("constructor !!!")
+    // console.log("constructor !!!")
   }
 
   logout = () => {
@@ -103,6 +104,23 @@ export default class App extends React.Component {
           <Route exact path="/find-jobs/login" render={(props) => <Login loginSuccess={this.state.loginSuccess} callBack={this.changeLogin.bind(this)} />} />
           <Route exact path="/find-jobs/register" render={(props) => <Register loginSuccess={this.state.loginSuccess} />} />
           <Route exact path="/find-jobs/data" render={(props) => (isLoginComponent)} />
+          <Route exact path="/find-jobs/employees"
+            render={
+              (props) =>
+                this.state.loginSuccess ?
+                  <Employees loginSuccess={this.state.loginSuccess}
+                    logout={this.logout}
+                    state={this.state}
+                    addProductToCart={this.addProductToCart}
+                    onChangeCartValue={this.onChangeCartValue.bind(this)}
+                    fn={{
+                      onChangeCartValue: this.onChangeCartValue.bind(this),
+                      addProductToCart: this.addProductToCart.bind(this),
+                      logout: this.logout.bind(this)
+                    }} />
+                  :
+                  <Redirect to="/find-jobs/login" />
+            } />
           <Route exact path="/find-jobs/customers"
             render={
               (props) =>

@@ -33,6 +33,7 @@ export default class ProductsData extends React.Component {
     fetch_data = async () => await window.$Connector.getProducts().then(
         data => {
             this.setState({ data: data , isLoading: false, keysData: Object.keys(data[0]) })
+            // console.log(Object.keys(data[0]))
         }
     )
 
@@ -59,7 +60,7 @@ export default class ProductsData extends React.Component {
         }else{
             let allS = ''
             for (let i=0; i < this.state.keysData.length; i++){
-                allS += data[this.state.keysData[i]].toUpperCase() + ' '
+                allS += String(data[this.state.keysData[i]]).toUpperCase() + ' '
             }
             return Boolean(allS.match(this.state.search.toUpperCase()))
         }
