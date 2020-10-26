@@ -34,13 +34,14 @@ export default class Login extends React.Component{
     }
 
     SubmitBtn = async () => {
-        await this.props.Tokenizer.Login(this.state.username, this.state.password).then(success => {
+        await window.$Connector.Login(this.state.username, this.state.password).then(success => {
             if (success){
                 this.props.callBack({isLoginSuccess: true, company: Boolean(this.state.company)})
                 this.setState({
                     isSuccess: true,
-                    tokenizer: this.props.Tokenizer.getInstance()
                 })
+                localStorage.setItem('username', this.state.username)
+                localStorage.setItem('password', this.state.password)
                 if(this.state.rememberMe){
                     localStorage.setItem('isLogin', '1')
                 }else{

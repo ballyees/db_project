@@ -14,7 +14,6 @@ export default class ProductsData extends React.Component {
             search : "",
             modalsEdit: false,
             dataForModals: {},
-            keysData: ["productCode", "productName", "productLine", "productScale", "productVendor", "productDescription", "quantityInStock", "buyPrice", "MSRP"]
         };
     }
 
@@ -31,19 +30,18 @@ export default class ProductsData extends React.Component {
         console.log(this.state.collapseID)
     }
 
+    fetch_data = async () => await window.$Connector.getProducts().then(
+        data => {
+            this.setState({ data: data , isLoading: false, keysData: Object.keys(data[0]) })
+        }
+    )
+
     componentDidMount() {
-        let fetch_data = async () => await this.props.Tokenizer.getProducts().then(
-            data => {
-                this.setState({ data: data , isLoading: false })
-                // console.log(Object.keys(data[0]))
-            }
-        )
-        fetch_data()
+        this.fetch_data()
     }
 
     onChange = e => {
         const { name, value } = e.target
-        // console.log(name, value)
         if (!Boolean(value.match(/[*+\-?^${}()|[\]\\]/g))){
             this.setState({
                 [name]: value
@@ -77,18 +75,38 @@ export default class ProductsData extends React.Component {
         }
     }
 
-    onClickDelete = () => {
-        let filter = (data) => !(data["productCode"] === this.state.collapseID)
-        this.setState(prevState => ({
-            data: prevState.data.filter(d => filter(d)),
-            collapseID: ""
-        }))
+    setLoading = () => {
+        this.setState({isLoading: true, collapseID: ""})
     }
+
+    onClickDelete = () => {
+        if (window.confirm(`Are you sure to delete id: ${this.state.collapseID}`)) {
+            let filter = (data) => !(data["productCode"] === this.state.collapseID)
+            this.setState(prevState => ({
+                data: prevState.data.filter(d => filter(d)),
+                collapseID: ""
+            }))
+        }
+    }
+
+    addProductToCart = (product) => {
+        if(!localStorage.getItem('cart')){
+          localStorage.setItem('cart', JSON.stringify({data: {}, customer: {}, promoCode: {}}));
+        }
+        let cart = JSON.parse(localStorage.getItem('cart'))
+        if(cart.data.hasOwnProperty(product["productCode"])){
+          cart.data[product["productCode"]] = {...product, ...{value: cart.data[product["productCode"]].value + 1}}
+        }else{
+          cart.data[product["productCode"]] = {...product, ...{value: 1}}
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log('change:',cart)
+      }
 
     onClickAdd = () => {
         let index = this.state.data.findIndex(d => d["productCode"] === this.state.collapseID)
         if (Boolean(~index)){
-            this.props.addToCart({...this.state.data[index]})
+            this.addProductToCart({...this.state.data[index]})
         }
     }
 
@@ -97,6 +115,7 @@ export default class ProductsData extends React.Component {
             search: "",
             collapseID: "",
         })
+        localStorage.clear()
     }
 
     onPressEnter = e =>{
@@ -168,7 +187,7 @@ export default class ProductsData extends React.Component {
                                     </MDBContainer>
                                 </h4>
                                 {this.state.data.filter(data => this.filterData(data)).map( data => (this.mapData(data)))}
-                                {this.state.modalsEdit?<EditModals type="product" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} />:<></>}
+                                {this.state.modalsEdit?<EditModals type="product" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} submitFn={{setLoading:this.setLoading.bind(this), fetch: this.fetch_data.bind(this)}} />:<></>}
                             </div>
                         </div>
                     </div>

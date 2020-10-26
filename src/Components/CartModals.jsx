@@ -1,38 +1,44 @@
 import React from 'react'
 import { MDBContainer, MDBJumbotron, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
-import Style from 'style-it'    
+import Style from 'style-it'
 
-export default class CartModals extends React.Component{
-    constructor(props){
+export default class CartModals extends React.Component {
+    constructor(props) {
         super(props)
+        let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {}
+        let cartData = cart.hasOwnProperty('data') ? cart.data : {}
+        let cartCus = cart.hasOwnProperty('customer') ? cart.customer : {}
+        let cartPromo = cart.hasOwnProperty('promoCode') ? cart.promoCode : {}
         this.state = {
-            modal: false,
-            cart: [],
-            productKey: {}
+            modal: props.open,
+            cart: cartData,
+            cartCustomer: cartCus,
+            cartPromotion: cartPromo
         }
     }
-    
+
     toggle = (e) => {
-        this.props.onClickP2C(e)
         this.setState({
             modal: !this.state.modal
         });
-        if(e === undefined || e.target.name === 'close'){
+        if (e === undefined || e.target.name === 'close') {
+            this.props.toggle(e)
             this.setState({
                 modal: false,
             })
-        }else if(e.target.name === 'submit'){
+        } else if (e.target.name === 'submit') {
             this.SubmitBtn(e)
         }
     }
 
-    sumPrice(){
-        if (Boolean(this.props.cart.length)){
+    sumPrice() {
+        let key = Object.keys(this.state.cart)
+        if (Boolean(key.length)) {
             let totalPrice = 0
             let totalNumber = 0
-            for (let i=0; i < this.props.cart.length; i++ ){
-                let val = parseInt(this.props.cart[i]["value"])
-                totalPrice += val * parseFloat(this.props.cart[i]["buyPrice"]).toFixed(2)
+            for (let i = 0; i < key.length; i++) {
+                let val = parseInt(this.state.cart[key[i]]["value"])
+                totalPrice += val * parseFloat(this.state.cart[key[i]]["buyPrice"]).toFixed(2)
                 totalNumber += val
             }
             return (
@@ -50,42 +56,60 @@ export default class CartModals extends React.Component{
                         </div>
                         {/* <hr className="my-2" /> */}
                     </div>
+                    {this.state.cartCustomer.hasOwnProperty("customerName") ? (
+                    <>
+                        <hr className="my-2" />
+                        <div className="row" key="Balance">
+                            <div className="col col-md-7 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                <p style={{ padding: 30, margin: 0 }} >Balance Credit: </p>
+                            </div>
+                            <div className="col col-md-2 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <p style={{ padding: 30, margin: 0 }} ></p>
+                            </div>
+                            <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                <p style={{ padding: 30, margin: 0 }} >{(this.state.cartCustomer["creditLimit"] - totalPrice).toFixed(2)}</p>
+                            </div>
+                        </div>
+                    </>
+                    ) : null}
+
                 </div>
             )
-        }else{
+        } else {
             return null
         }
     }
-    
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.cart !== this.props.cart){
-            let productKey = {}
-            for (let i=0; i < this.props.cart.length; i++ ){
-                productKey[this.props.cart[i]["productCode"]] = parseInt(this.props.cart[i]["value"])
-            }
-            this.setState(prev => ({
-                productKey: productKey,
-                cart: this.props.cart
-            }))
+
+    onChangeCartValue(productKey, value) {
+        let cart = JSON.parse(localStorage.getItem('cart'))
+        cart.data[productKey] = { ...cart.data[productKey], ...{ value: value } }
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     console.log(prevState, this.state)
+    // }
+
+    onChange = e => {
+        const { name, value } = e.target
+        let val = parseInt(value)
+        if (isNaN(val)) {
+            val = 0
+        } else if (value.length > 1 && value.startsWith("0")) {
+            val = parseInt(value.substring(1))
         }
-      }
+        if (val >= this.state.cart[name]["quantityInStock"]) {
+            val = this.state.cart[name]["quantityInStock"]
+        }
+        this.onChangeCartValue(name, val)
+        this.setState(prevState => ({
+            cart: { ...prevState.cart, ...{ [name]: { ...prevState.cart[name], ...{ value: val } } } }
+        }))
+    }
 
     mapData(data) {
         return (
             <div className="row" key={data["productCode"]}>
-                {/* <div className="col" style={{ padding: 0, margin: 0 }}>
-                    <div className="d-flex justify-content-between">
-                        <div className="p-2 col-example text-left" style={{ padding: 0, margin: 0 }} >
-                            <p style={{ padding: 27, margin: 0 }} >[{data["productCode"]}] {data["productName"]}</p>
-                        </div>
-                        <div className="p-2 col-example text-right" style={{ padding: 0, margin: 0 }} >
-                            <p style={{ padding: 27, margin: 0 }} >[{data["buyPrice"]}]</p>
-                        </div>
-                        <div className="p-2 col-example text-right" style={{ padding: 0, margin: 0 }} >
-                            <MDBInput label="value" name={data["productCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" value={this.state.productKey[data["productCode"]]} min={0} />
-                        </div>
-                    </div>
-                </div> */}
                 <div className="col col-md-7 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
                     <p style={{ padding: 30, margin: 0 }} >[{data["productCode"]}] {data["productName"]}</p>
                 </div>
@@ -93,65 +117,38 @@ export default class CartModals extends React.Component{
                     <p style={{ padding: 30, margin: 0 }} >[{data["buyPrice"]}]</p>
                 </div>
                 <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                    <MDBInput label="value" outline name={data["productCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" value={String(this.state.productKey[data["productCode"]])} min={0} max={data["quantityInStock"]}/>
+                    <MDBInput label="value" outline name={data["productCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" value={String(data.value)} min={0} max={data["quantityInStock"]} />
                 </div>
-                {/* <hr className="my-2" /> */}
             </div>)
     }
 
-    onChange = e => {
-        const { name, value } = e.target
-        if (this.state.productKey.hasOwnProperty(name)){
-            let val = parseInt(value)
-            if(isNaN(val)){
-                val = 0
-            }else if(value.length > 1 && value.startsWith("0")){
-                val = parseInt(value.substring(1))
-            }
-            let index = this.state.cart.findIndex(d => name === d["productCode"])
-            
-            if (val >= this.state.cart[index]["quantityInStock"]){
-                val = this.state.cart[index]["quantityInStock"]
-            }
-            this.setState(prevState => ({
-                productKey: {...prevState.productKey, ...{[name]: val}},
-                [name]: val
-            }))
-            this.props.fn.onChangeCartValue(name, val)
-            console.log(val)    
-        }else{
-            this.setState({
-                [name]: value
-            })   
-        }
+    SubmitBtn = (e) => {
+        console.log(this.state)
     }
 
-    SubmitBtn(e){
-        console.log(this.state)   
-    }
-
-    render(){
+    render() {
         return (
             <div>
-                <MDBBtn onClick={this.toggle} outline color="secondary" style={{borderRadius: "20px", textAlign: ""}} name="cart">cart</MDBBtn>
+                <MDBBtn onClick={this.toggle} outline color="secondary" style={{ borderRadius: "20px", textAlign: "" }} name="cart">cart</MDBBtn>
                 <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
-                <MDBModalHeader toggle={this.toggle} style={{color: "rgb(0, 0, 0)"}}></MDBModalHeader>
-                <MDBModalBody>
-                    <MDBContainer style={{color: "rgb(0, 0, 0)"}}>
-                        <MDBJumbotron style={{width: "100%", borderRadius: "7px"}}>
-                            <h2>Cart</h2>
-                            {this.props.cart.map(data => this.mapData(data))}
-                            {this.sumPrice()}
-                            <hr className="my-2" />
-                            <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
-                                <MDBBtn name="submit" onClick={this.toggle} outline color="info" style={{borderRadius: "20px", width: "100%"}} className="submit">Submit</MDBBtn>
-                            </Style>
-                            <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
-                                <MDBBtn color="secondary" name="close" onClick={this.toggle} outline style={{borderRadius: "20px", width: "100%"}} className="closed" >Close</MDBBtn>
-                            </Style>
-                        </MDBJumbotron>
-                    </MDBContainer>
-                </MDBModalBody>
+                    <MDBModalHeader toggle={this.toggle} style={{ color: "rgb(0, 0, 0)" }}></MDBModalHeader>
+                    <MDBModalBody>
+                        <MDBContainer style={{ color: "rgb(0, 0, 0)" }}>
+                            <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
+                                <h2>Cart {this.state.cartCustomer.hasOwnProperty("customerName") ? "for " + this.state.cartCustomer["customerName"] : null}</h2>
+                                {/* {this.props.cart.map(data => this.mapData(data))} */}
+                                {Object.keys(this.state.cart).map(key => this.mapData(this.state.cart[key]))}
+                                {this.sumPrice()}
+                                <hr className="my-2" />
+                                <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
+                                    <MDBBtn name="submit" onClick={this.SubmitBtn} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                </Style>
+                                <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
+                                    <MDBBtn color="secondary" name="close" onClick={this.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>
+                                </Style>
+                            </MDBJumbotron>
+                        </MDBContainer>
+                    </MDBModalBody>
                 </MDBModal>
             </div>
         )

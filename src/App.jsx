@@ -5,10 +5,10 @@ import 'mdbreact/dist/css/mdb.css';
 
 // import component
 import Login from './Components/Login';
-import Home from './Components/Home';
+import Products from './Components/Products';
 import Register from './Components/Register';
 import Data from './Components/Data';
-import Tokenizer from './Components/Tokenizer';
+import Customers from './Components/Customers';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
@@ -17,43 +17,45 @@ export default class App extends React.Component {
     super(props)
     let isLogin = true
     if (localStorage.getItem('username') && localStorage.getItem('password')) {
-      // login api 
+      window.$Connector.Login(localStorage.getItem('username'), localStorage.getItem('password'))
     }
 
+    console.log(window.$Connector, 'have connector')
     this.state = {
       loginSuccess: isLogin,
-      tokenizer: new Tokenizer('Tokenizer'),
       cart: []
     }
+    console.log("constructor !!!")
   }
 
   logout = () => {
     this.setState({
       loginSuccess: false,
     })
+    localStorage.removeItem('cart')
+    localStorage.removeItem('username')
+    localStorage.removeItem('password')
   }
 
-  onChangeCartValue(productKey, value) {    
-    let index = this.state.cart.findIndex(p => productKey === p["productCode"])
-    let data = ({ ...this.state.cart[index], ...({ value: value }) })
-    this.setState(prevState => ({
-      cart: [...prevState.cart.slice(0, index), ...[data], ...prevState.cart.slice(index + 1)]
-    }))
+  onChangeCartValue(productKey, value) {
+    let cart = JSON.parse(localStorage.getItem('cart'))
+    cart.data[productKey] = { ...cart.data[productKey], ...{ value: value } }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    console.log('modal:', cart)
   }
 
-  addToCart = (product) => {
-    let index = this.state.cart.findIndex(p => product["productCode"] === p["productCode"])
-    if (Boolean(~index)) {
-      let data = ({ ...this.state.cart[index], ...({ value: this.state.cart[index]["value"] + 1 }) })
-      this.setState(prevState => ({
-        cart: [...prevState.cart.slice(0, index), ...[data], ...prevState.cart.slice(index + 1)]
-      }))
-    } else {
-      product = { ...product, ...{ value: 1 } }
-      this.setState(prevState => ({
-        cart: [...prevState.cart, product]
-      }))
+  addProductToCart = (product) => {
+    if (!localStorage.getItem('cart')) {
+      localStorage.setItem('cart', JSON.stringify({ data: {}, customer: '', promoCode: '' }));
     }
+    let cart = JSON.parse(localStorage.getItem('cart'))
+    if (cart.data.hasOwnProperty(product["productCode"])) {
+      cart.data[product["productCode"]] = { ...product, ...{ value: cart.data[product["productCode"]].value + 1 } }
+    } else {
+      cart.data[product["productCode"]] = { ...product, ...{ value: 1 } }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    console.log('change:', cart)
   }
 
   changeLogin = (e) => {
@@ -75,56 +77,50 @@ export default class App extends React.Component {
     if (this.state.loginSuccess) {
       isLoginComponent = <Data />
     } else {
-      isLoginComponent = <Redirect to="/find-jobs/home" />
+      isLoginComponent = <Redirect to="/find-jobs/login" />
     }
     return (
       <Router>
         <div className="App">
-          <Route exact path="/find-jobs"
-            render={(props) =>
-              <Home loginSuccess={this.state.loginSuccess}
-                logout={this.logout}
-                Tokenizer={this.state.tokenizer}
-                state={this.state}
-                addToCart={this.addToCart}
-                onChangeCartValue={this.onChangeCartValue.bind(this)}
-                fn={{
-                  onChangeCartValue: this.onChangeCartValue.bind(this),
-                  addToCart: this.addToCart.bind(this),
-                  logout: this.logout.bind(this)
-                }} />}
+          <Route exact path={"(/|/find-jobs/home|/find-jobs/products|/find-jobs)"}
+            render={
+              (props) =>
+                this.state.loginSuccess ?
+                  <Products loginSuccess={this.state.loginSuccess}
+                    logout={this.logout}
+                    state={this.state}
+                    addProductToCart={this.addProductToCart}
+                    onChangeCartValue={this.onChangeCartValue.bind(this)}
+                    fn={{
+                      onChangeCartValue: this.onChangeCartValue.bind(this),
+                      addProductToCart: this.addProductToCart.bind(this),
+                      logout: this.logout.bind(this)
+                    }} />
+                  :
+                  <Redirect to="/find-jobs/login" />
+            }
           />
-          <Route exact path="/"
-            render={(props) =>
-              <Home loginSuccess={this.state.loginSuccess}
-                logout={this.Logout}
-                Tokenizer={this.state.tokenizer}
-                state={this.state}
-                addToCart={this.addToCart}
-                onChangeCartValue={this.onChangeCartValue.bind(this)}
-                fn={{
-                  onChangeCartValue: this.onChangeCartValue.bind(this),
-                  addToCart: this.addToCart.bind(this),
-                  logout: this.logout.bind(this)
-                }} />}
-          />
-          <Route exact path="/find-jobs/home"
-            render={(props) =>
-              <Home loginSuccess={this.state.loginSuccess}
-                logout={this.Logout}
-                Tokenizer={this.state.tokenizer}
-                state={this.state}
-                addToCart={this.addToCart.bind(this)}
-                onChangeCartValue={this.onChangeCartValue.bind(this)}
-                fn={{
-                  onChangeCartValue: this.onChangeCartValue.bind(this),
-                  addToCart: this.addToCart.bind(this),
-                  logout: this.logout.bind(this)
-                }} />}
-          />
-          <Route exact path="/find-jobs/login" render={(props) => <Login loginSuccess={this.state.loginSuccess} Tokenizer={this.state.tokenizer} callBack={this.changeLogin.bind(this)} />} />
+          <Route exact path="/find-jobs/login" render={(props) => <Login loginSuccess={this.state.loginSuccess} callBack={this.changeLogin.bind(this)} />} />
           <Route exact path="/find-jobs/register" render={(props) => <Register loginSuccess={this.state.loginSuccess} />} />
           <Route exact path="/find-jobs/data" render={(props) => (isLoginComponent)} />
+          <Route exact path="/find-jobs/customers"
+            render={
+              (props) =>
+                this.state.loginSuccess ?
+                  <Customers loginSuccess={this.state.loginSuccess}
+                    logout={this.logout}
+                    state={this.state}
+                    addProductToCart={this.addProductToCart}
+                    onChangeCartValue={this.onChangeCartValue.bind(this)}
+                    fn={{
+                      onChangeCartValue: this.onChangeCartValue.bind(this),
+                      addProductToCart: this.addProductToCart.bind(this),
+                      logout: this.logout.bind(this)
+                    }} />
+                  :
+                  <Redirect to="/find-jobs/login" />
+            }
+          />
         </div>
       </Router>
     );
