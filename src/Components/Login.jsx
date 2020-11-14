@@ -8,7 +8,7 @@ import { MDBInput } from "mdbreact";
 
 export default class Login extends React.Component{
     constructor(props){
-        super(props)
+        super()
         this.state = {
             username: '',
             password: '',
@@ -33,24 +33,21 @@ export default class Login extends React.Component{
         
     }
 
-    SubmitBtn = async () => {
-        await window.$Connector.Login(this.state.username, this.state.password).then(success => {
+    loginFunc = async (username, password) => {
+        await window.$Connector.Login(username, password).then(success => {
             if (success){
-                this.props.callBack({isLoginSuccess: true, company: Boolean(this.state.company)})
+                this.props.callBack({isLoginSuccess: true})
                 this.setState({
                     isSuccess: true,
                 })
-                localStorage.setItem('username', this.state.username)
-                localStorage.setItem('password', this.state.password)
-                if(this.state.rememberMe){
-                    localStorage.setItem('isLogin', '1')
-                }else{
-                    localStorage.setItem('isLogin', '0')
-                }
-                // console.log(this.state)
+                localStorage.setItem('username', username)
+                localStorage.setItem('password', password)
             }
         })
-        
+    }
+
+    SubmitBtn = async () => {
+        this.loginFunc(this.state.username, this.state.password)
     }
 
     KeyPressEnter = e => {
@@ -59,7 +56,14 @@ export default class Login extends React.Component{
         }
     }
 
+    componentDidMount() {
+        if (localStorage.getItem('username') && localStorage.getItem('password')) {
+            this.loginFunc(localStorage.getItem('username'), localStorage.getItem('password'))
+		}
+    }
+
     render(){
+        
         return (
             <div style={{backgroundImage: `url(${starSky})`, backgroundSize: "cover", position: "relative", height: "1000px", width: "100%"}}>
                 <div className="container">
@@ -71,7 +75,7 @@ export default class Login extends React.Component{
                                         <div className="col-lg-6 col-lg-12">
                                             <div className="p-5">
                                                 <div className="text-center">
-                                                <Link to="/find-jobs/home"><img src={FindSVG} alt="Logo" style={{maxHeight: "40%", maxWidth: "30%"}} /></Link>
+                                                <Link to="/model-figure/home"><img src={FindSVG} alt="Logo" style={{maxHeight: "40%", maxWidth: "30%"}} /></Link>
                                                     <h4 className="text-dark mb-4">Welcome to Find Jobs</h4>
                                                 </div>
                                                 <div className="user">
@@ -83,7 +87,7 @@ export default class Login extends React.Component{
                                                     </div> */}
                                                     <button className="btn btn-info btn-block text-white btn-user" id="submit-btn" type="submit" style={{borderRadius: "20px"}} onClick={this.SubmitBtn}>SIGN IN</button>
                                                 </div>
-                                                {this.state.isSuccess?<Redirect to="/find-jobs/home" />:<div></div>}
+                                                {this.state.isSuccess?<Redirect to="/model-figure/home" />:<div></div>}
                                             </div>
                                         </div>
                                     </div>
@@ -95,19 +99,4 @@ export default class Login extends React.Component{
             </div>
         )
     }
-
-    // render(){
-    //     return (
-    //     <div className="login-dark" style={{height: "1000px", background: `#475d62 url(${starSky}`, backgroundSize: "cover", position: "relative"}}>
-    //         <form method="post" style={{backgroundColor: "#333333"}}>
-    //             <h2 className="sr-only">Login Form</h2>
-    //             {/* <div className="illustration"><i className="icon ion-ios-locked-outline"></i></div> */}
-    //             <div className="illustration"><i className="fa fa-lock"></i></div>
-    //             <div className="form-group"><input className="form-control" type="email" name="email" placeholder="Email" /></div>
-    //             <div className="form-group"><input className="form-control" type="password" name="password" placeholder="Password" /></div>
-    //             <div className="form-group"><button className="btn btn-primary btn-block" type="submit" style={{backgroundColor: "#269d9d"}}>Log In</button></div>
-    //             <Link to="/"><span className="forgot">Forgot your email or password?</span></Link>
-    //         </form>
-    //     </div>)
-    // }
 }

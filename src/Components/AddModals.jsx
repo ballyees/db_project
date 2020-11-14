@@ -1,20 +1,27 @@
 import React from 'react'
 import { MDBContainer, MDBJumbotron, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import Style from 'style-it'
+import Configure from './Configure';
 
-export default class AddType extends React.Component {
+export default class AddModals extends React.Component {
     constructor(props) {
-        super(props)
+        super()
         this.state = ({
             modal: props.open,
             type: props.type, //customer, product, employee
-            [props.type]: {},
+            [props.type]: Configure.addData(props.type),
         })
         console.log('propssss',props)
     }
 
     onSubmit = e => {
-        this.props.toggle()
+        // e.preventDefault();
+        console.log(this.state)
+        let type = this.state.type
+        if(type === "customer"){
+            window.$Connector.addCustomer(this.state[type])
+        }
+        // this.props.toggle()
     }
 
     toggle = e => {
@@ -38,13 +45,8 @@ export default class AddType extends React.Component {
             [prevState.type]: { ...prevState[prevState.type], ...{ [name]: value } }
         }))
     }
-    
-    componentDidMount(){
-
-    }
 
     onPressEnter = e => {
-        // console.log(e.key)
         if (e.key === 'Enter' || e.keyCode === 13) {
             e.preventDefault()
         }
@@ -62,9 +64,6 @@ export default class AddType extends React.Component {
                                     <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
                                         <h2>Add Product</h2>
                                         <div className="row">
-                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                                                <MDBInput label="Product Code" outline name="productCode" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
-                                            </div>
                                             <div className="col col-md-6 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                                                 <MDBInput label="Product Name" outline name="productName" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                             </div>
@@ -87,7 +86,7 @@ export default class AddType extends React.Component {
                                                 <MDBInput label="Buy Price" outline name="buyPrice" onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" min={0} />
                                             </div>
                                             <div className="col col-md-6 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                                                <MDBInput label="MSRP" outline name="MSRP" onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" min={0} />
+                                                <MDBInput label="MSRP" outline name="MSRP" onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" min={0} valueDefault={0} />
                                             </div>
                                         </div>
                                         <hr className="my-2" />
@@ -113,7 +112,7 @@ export default class AddType extends React.Component {
                                     <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
                                         <h2>Employee</h2>
                                         <div className="row">
-                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                            <div className="col col-md-12 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
                                                 <MDBInput label="Employee Number" outline name="employeeNumber" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                             </div>
                                             <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
@@ -161,9 +160,6 @@ export default class AddType extends React.Component {
                                     <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
                                         <h2>Customer</h2>
                                         <div className="row">
-                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                                                <MDBInput label="Customer Number" outline name="customerNumber" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
-                                            </div>
                                             <div className="col col-md-6 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                                                 <MDBInput label="Customer Name" outline name="customerName" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                             </div>

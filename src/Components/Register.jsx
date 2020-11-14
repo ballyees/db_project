@@ -92,7 +92,7 @@ export default class Register extends React.Component{
                                         <div className="col-lg-6 col-lg-12">
                                             <div className="p-5">
                                                 <div className="text-center">
-                                                <Link to="/find-jobs/home"><img src={FindSVG} alt="Logo" style={{maxHeight: "40%", maxWidth: "30%"}} /></Link>
+                                                <Link to="/model-figure/home"><img src={FindSVG} alt="Logo" style={{maxHeight: "40%", maxWidth: "30%"}} /></Link>
                                                     <h4 className="text-dark mb-4">Welcome to Find Jobs</h4>
                                                 </div>
                                                 <div className="row">
@@ -111,7 +111,7 @@ export default class Register extends React.Component{
                                                             <button className="btn btn-info btn-block text-white btn-user" id="submit-btn" type="submit" style={{borderRadius: "20px"}} onClick={this.SubmitBtn}>SIGN IN</button>
                                                             <hr />
                                                         </div>
-                                                        <span className="haveAcc">Already have an account? </span><Link to="/find-jobs/login">Sign In</Link>
+                                                        <span className="haveAcc">Already have an account? </span><Link to="/model-figure/login">Sign In</Link>
                                                     </div>
                                                 </div>
                                             </div>

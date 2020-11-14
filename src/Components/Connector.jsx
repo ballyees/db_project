@@ -1,9 +1,10 @@
 import ConfigureConnector from './ConfigureConnector';
 export default class Connector {
+    
     #username = '';
-    #token = '';
     #type = '';
     #isLogin = false;
+    
     static instance = null;
     
     constructor(name){
@@ -12,9 +13,7 @@ export default class Connector {
             Connector.instance = this
         }
     }
-    get token(){
-        return this.#token
-    }
+
     get isLogin(){
         return this.#isLogin
     }
@@ -24,7 +23,7 @@ export default class Connector {
     }
 
     toString(){
-        return `${this.#username} :: ${this.#type} :: ${this.#token} :: ${this.#isLogin}`
+        return `${this.#username} :: ${this.#type} :: ${this.#isLogin}`
     }
     getInstance(){
         if( Connector.instance === null){
@@ -32,9 +31,9 @@ export default class Connector {
         }
         return Connector.instance
     }
+    
     setUserLogout(){
         this.#username = ''
-        this.#token = ''
         this.#type = ''
         this.#isLogin = false
     }
@@ -42,21 +41,13 @@ export default class Connector {
     async setUserLogin(data){
         // console.log(data)
         this.#username = data[ConfigureConnector.keyResponseData][0].username
-        this.#token = data[ConfigureConnector.keyTokenHeader]
         this.#type = data[ConfigureConnector.keyResponseData][0].type
         this.#isLogin = true
         // console.log(this.toString())
     }
 
-    async setRefershtoken(response){
-        if (response.hasOwnProperty(ConfigureConnector.keyTokenHeader)) {
-            this.#token = response[ConfigureConnector.keyTokenHeader]
-        }else{
-            console.log(`don't have token`)
-        }
-    }
-
     async Login(username, password){
+        console.log("connect to login")
         let data = {"username": username, "password": password}
         let options = {
             method: 'POST',
@@ -79,6 +70,21 @@ export default class Connector {
 
     async getProducts(){
         return await fetch(ConfigureConnector.proxyAnywhereAndUrlProducts).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
+    }
+
+    async addCustomer(data){
+        let options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(data)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlCustomers, options).then(response => {
+            return response.ok
+        })
     }
 
     async editProduct(data){

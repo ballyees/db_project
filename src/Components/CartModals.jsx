@@ -1,6 +1,7 @@
 import React from 'react'
 import { MDBContainer, MDBJumbotron, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 import Style from 'style-it'
+import CarbonDatePicker from 'react-carbon-datepicker';
 
 export default class CartModals extends React.Component {
     constructor(props) {
@@ -13,7 +14,9 @@ export default class CartModals extends React.Component {
             modal: props.open,
             cart: cartData,
             cartCustomer: cartCus,
-            cartPromotion: cartPromo
+            cartPromotion: cartPromo,
+            shippingDate: '',
+            isShippingDate: false
         }
     }
 
@@ -41,6 +44,8 @@ export default class CartModals extends React.Component {
                 totalPrice += val * parseFloat(this.state.cart[key[i]]["buyPrice"]).toFixed(2)
                 totalNumber += val
             }
+            let totalPoint = window.$nf.format((Math.floor(totalPrice / 100) * 3))
+            console.log(totalPoint)
             return (
                 <div>
                     <hr className="my-2" />
@@ -49,10 +54,22 @@ export default class CartModals extends React.Component {
                             <p style={{ padding: 30, margin: 0 }} >Total price: </p>
                         </div>
                         <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                            <p style={{ padding: 30, margin: 0 }} >[{totalPrice.toFixed(2)}]</p>
+                            <p style={{ padding: 30, margin: 0 }} >[{window.$nf.format(totalPrice.toFixed(2))}]</p>
                         </div>
                         <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                            <p style={{ padding: 30, margin: 0 }} >{totalNumber}</p>
+                            <p style={{ padding: 30, margin: 0 }} >{window.$nf.format(totalNumber)}</p>
+                        </div>
+                        {/* <hr className="my-2" /> */}
+                    </div>
+                    <div className="row" key="totalPoint">
+                        <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <p style={{ padding: 30, margin: 0 }} >Total points: </p>
+                        </div>
+                        <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <p style={{ padding: 30, margin: 0 }} ></p>
+                        </div>
+                        <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <p style={{ padding: 30, margin: 0 }} >{totalPoint}</p>
                         </div>
                         {/* <hr className="my-2" /> */}
                     </div>
@@ -64,15 +81,36 @@ export default class CartModals extends React.Component {
                                 <p style={{ padding: 30, margin: 0 }} >Balance Credit: </p>
                             </div>
                             <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                            <p style={{ padding: 30, margin: 0 }} >[{(this.state.cartCustomer["creditLimit"] - totalPrice).toFixed(2)}]</p>
+                            <p style={{ padding: 30, margin: 0 }} >[{window.$nf.format((this.state.cartCustomer["creditLimit"] - totalPrice).toFixed(2))}]</p>
                             </div>
                             <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                                <p style={{ padding: 30, margin: 0 }} >{(this.state.cartCustomer["creditLimit"]).toFixed(2)}</p>
+                                <p style={{ padding: 30, margin: 0 }} >{window.$nf.format((this.state.cartCustomer["creditLimit"]).toFixed(2))}</p>
                             </div>
                         </div>
+                        <div className="row" key="shippingDate">
+                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                <p style={{ padding: 30, margin: 0 }} >Shipping Date: </p>
+                            </div>
+                            <div className="col col-md-1 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                            <p style={{ padding: 30, margin: 0 }} ></p>
+                            </div>
+                            <div className="col col-md-5 text-right" style={{ padding: 30, margin: 0 }} >
+                                <CarbonDatePicker onChange={dateTimeStamp => {
+                                    let date = new Date(dateTimeStamp)
+                                    let formatDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDay()}`
+                                    // console.log(this.state.isShippingDate, this.state.shippingDate)
+                                    this.setState({
+                                        shippingDate: formatDate,
+                                        isShippingDate: true
+                                    })
+                                    }
+                                } />
+                            </div>
+                        </div>
+                        {/* <hr className="my-2" /> */}
                     </>
                     ) : null}
-
+                    
                 </div>
             )
         } else {
@@ -114,7 +152,7 @@ export default class CartModals extends React.Component {
                     <p style={{ padding: 30, margin: 0 }} >[{data["productCode"]}] {data["productName"]}</p>
                 </div>
                 <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                    <p style={{ padding: 30, margin: 0 }} >[{data["buyPrice"]}]</p>
+                    <p style={{ padding: 30, margin: 0 }} >[{window.$nf.format(data["buyPrice"])}]</p>
                 </div>
                 <div className="col col-md-3 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                     <MDBInput label="value" outline name={data["productCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" value={String(data.value)} min={0} max={data["quantityInStock"]} />

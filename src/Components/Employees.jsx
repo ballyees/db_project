@@ -2,9 +2,9 @@ import React from 'react'
 import Navbar from './Navbar'
 import EmployeesData from './EmployeesData';
 export default class Employees extends React.Component{
-    constructor(props){
-        super (props)
-    }
+    // constructor(props){
+    //     super (props)
+    // }
     componentDidMount(){
         document.title = "Models-Figure | Employees"
     }

@@ -107,6 +107,7 @@ export default class EmployeesData extends React.Component {
     }
 
     mapData(data) {
+        console.log(window.$Connector.type)
         return (
             <div className="row" key={data["employeeNumber"]}>
                 <div className="col-lg-12 col-md-12">
@@ -124,7 +125,7 @@ export default class EmployeesData extends React.Component {
                                 Email : {data["email"]} <br />
                                 Office Code : {data["officeCode"]} <br />
                                     {data["reportsTo"] ? "Reports To : " + data["reportsTo"] : null}{data["reportsTo"] ? <br /> : null}
-                                    {data["reportsTo"] ? "Reports To (Name) : " + `${data["firstName_reportTo"]} ${data["lastName_reportTo"]}` : null}{data["reportsTo"] ? <br /> : null}
+                                    {data["reportsTo"] ? `Reports To (Name) : ${data["firstName_reportTo"]} ${data["lastName_reportTo"]}` : null}{data["reportsTo"] ? <br /> : null}
                                 Job Title : {data["jobTitle"]} <br />
                                 </p>
                                 <hr />

@@ -5,7 +5,7 @@ import EditModals from './EditModals';
 
 export default class CustomersData extends React.Component {
     constructor(props) {
-        super(props);
+        super();
         this.state = {
             data: [],
             options: [],
@@ -128,7 +128,7 @@ export default class CustomersData extends React.Component {
                     <MDBBtn color="primary" onClick={this.toggleCollapse(data["customerNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
                         <div className="d-flex justify-content-between">
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["customerNumber"]}] {data["customerName"]}</div>
-                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >Credit Limit: {data["creditLimit"].toFixed(2)}</div>
+                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >Credit Limit: {window.$nf.format(data["creditLimit"].toFixed(2))}</div>
                         </div>
                     </MDBBtn>
                     <MDBCollapse id={String(data["customerNumber"])} isOpen={this.state.collapseID===data["customerNumber"]} >
@@ -136,14 +136,14 @@ export default class CustomersData extends React.Component {
                             <div className="card-body">
                                 <p className="card-text text-left" style={{ fontSize: "16px" }}>
                                     Contact : {data["contactFirstName"]} {data["contactLastName"]} <br />
-                                Phone Number : {data["phone"]} <br />
-                                Address Line1 : {data["addressLine1"]} <br />
+                                    Phone Number : {data["phone"]} <br />
+                                    Address Line1 : {data["addressLine1"]} <br />
                                     {data["addressLine2"] ? "Address Line2 : " + data["addressLine2"] : null}{data["addressLine2"] ? <br /> : null}
-                                City: {data["city"]} <br />
+                                    City: {data["city"]} <br />
                                     {data["state"] ? "State: " + data["state"] : null}{data["state"] ? <br /> : null}
                                     {data["postalCode"] ? "Postal Code : " + data["postalCode"] : null}{data["postalCode"] ? <br /> : null}
-                                Country : {data["country"]} <br />
-                                Sales Representatives Number : {data["salesRepEmployeeNumber"] ? `${data["salesRepEmployeeNumber"]} [${data["firstName"]} ${data["lastName"]}]` : "None"}  <br />
+                                    Country : {data["country"]} <br />
+                                    Sales Representatives Number : {data["salesRepEmployeeNumber"] ? `${data["salesRepEmployeeNumber"]} [${data["firstName"]} ${data["lastName"]}]` : "None"}  <br />
                                 </p>
                                 <hr />
                                 <MDBContainer>

@@ -4,7 +4,7 @@ import Style from 'style-it'
 
 export default class EditModals extends React.Component {
     constructor(props) {
-        super(props)
+        super()
         this.state = ({
             ...{
                 modal: false,
@@ -90,9 +90,55 @@ export default class EditModals extends React.Component {
                         </MDBModal>
                     </div>
                 )
-
             case "employee":
-                return null
+                return (
+                    <div>
+                        <MDBModal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
+                            <MDBModalHeader toggle={this.props.toggle} style={{ color: "rgb(0, 0, 0)" }}></MDBModalHeader>
+                            <MDBModalBody>
+                                <MDBContainer style={{ color: "rgb(0, 0, 0)" }}>
+                                    <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
+                                        <h2>Edit Employee</h2>
+                                        <div className="row">
+                                            <div className="col col-md-12 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput disabled label="Employee Number" outline name="employeeNumber" value={this.state["employeeNumber"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="FirstName" outline name="firstName" value={this.state["firstName"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="LastName" outline name="lastName" value={this.state["lastName"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <br></br>
+                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="Extension" outline name="extension" value={this.state["extension"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="Email" outline name="email" value={this.state["email"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-12 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="Office Code" outline name="officeCode" value={this.state["officeCode"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-12 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="Reports To" outline name="reportsTo" value={this.state["reportsTo"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-6 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="Job Title" outline name="jobTitle" value={this.state["jobTitle"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                        </div>
+                                        <hr className="my-2" />
+                                        <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
+                                            <MDBBtn name="submit" onClick={this.onSubmit} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                        </Style>
+                                        <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
+                                            <MDBBtn color="secondary" name="close" onClick={this.props.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>
+                                        </Style>
+                                    </MDBJumbotron>
+                                </MDBContainer>
+                            </MDBModalBody>
+                        </MDBModal>
+                    </div>
+                )
             case "customer":
                 return (
                     <div>

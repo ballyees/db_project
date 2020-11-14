@@ -132,16 +132,16 @@ export default class ProductsData extends React.Component {
                     <MDBBtn color="primary" onClick={this.toggleCollapse(data["productCode"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
                         <div className="d-flex justify-content-between">
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["productCode"]}] {data["productName"]}</div>
-                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >Stock: {data["quantityInStock"]}</div>
+                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >Stock: {window.$nf.format(data["quantityInStock"])}</div>
                         </div>
                     </MDBBtn>
                     <MDBCollapse id={data["productCode"]} isOpen={this.state.collapseID}>
                         <div className="card">
                             <div className="card-body">
                                 <p className="card-text text-left" style={{fontSize: "16px"}}>
-                                Price : {data["buyPrice"]} <br/>
+                                Price : {window.$nf.format(data["buyPrice"])} <br/>
                                 Product Line : {data["productLine"]} <br/>
-                                MSRP : {data["MSRP"]} <br/>
+                                MSRP : {window.$nf.format(data["MSRP"])} <br/>
                                 Scale: {data["productScale"]} <br/>
                                 Vendor: {data["productVendor"]} <br/>
                                 Product Description : {data["productDescription"]} <br/>

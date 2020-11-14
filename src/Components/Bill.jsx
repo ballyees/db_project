@@ -6,7 +6,7 @@ export default class Products extends React.Component{
     //     super (props)
     // }
     componentDidMount(){
-        document.title = "Models-Figure | Products"
+        document.title = "Models-Figure | Bills"
     }
     render(){
         return (
