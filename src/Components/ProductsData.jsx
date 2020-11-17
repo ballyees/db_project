@@ -82,6 +82,7 @@ export default class ProductsData extends React.Component {
 
     onClickDelete = () => {
         if (window.confirm(`Are you sure to delete id: ${this.state.collapseID}`)) {
+            window.$Connector.deleteProduct(this.state.collapseID)
             let filter = (data) => !(data["productCode"] === this.state.collapseID)
             this.setState(prevState => ({
                 data: prevState.data.filter(d => filter(d)),
@@ -98,7 +99,9 @@ export default class ProductsData extends React.Component {
         if(cart.data.hasOwnProperty(product["productCode"])){
           cart.data[product["productCode"]] = {...product, ...{value: cart.data[product["productCode"]].value + 1}}
         }else{
-          cart.data[product["productCode"]] = {...product, ...{value: 1}}
+          if(product['quantityInStock'] !== 0){
+            cart.data[product["productCode"]] = {...product, ...{value: 1}}
+          }
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         console.log('change:',cart)

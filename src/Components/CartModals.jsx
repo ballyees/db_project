@@ -10,13 +10,16 @@ export default class CartModals extends React.Component {
         let cartData = cart.hasOwnProperty('data') ? cart.data : {}
         let cartCus = cart.hasOwnProperty('customer') ? cart.customer : {}
         let cartPromo = cart.hasOwnProperty('promoCode') ? cart.promoCode : {}
+        let date = new Date()
+        date.setDate(date.getDate()+7)
+        let formatDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
         this.state = {
             modal: props.open,
             cart: cartData,
             cartCustomer: cartCus,
             cartPromotion: cartPromo,
-            shippingDate: '',
-            isShippingDate: false
+            requiredDate: formatDate,
+            comments: ""
         }
     }
 
@@ -45,7 +48,6 @@ export default class CartModals extends React.Component {
                 totalNumber += val
             }
             let totalPoint = window.$nf.format((Math.floor(totalPrice / 100) * 3))
-            console.log(totalPoint)
             return (
                 <div>
                     <hr className="my-2" />
@@ -87,24 +89,30 @@ export default class CartModals extends React.Component {
                                 <p style={{ padding: 30, margin: 0 }} >{window.$nf.format((this.state.cartCustomer["creditLimit"]).toFixed(2))}</p>
                             </div>
                         </div>
-                        <div className="row" key="shippingDate">
+                        <div className="row" key="requiredDate">
                             <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
-                                <p style={{ padding: 30, margin: 0 }} >Shipping Date: </p>
+                                <p style={{ padding: 30, margin: 0 }} >Required Date: </p>
                             </div>
                             <div className="col col-md-1 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                             <p style={{ padding: 30, margin: 0 }} ></p>
                             </div>
                             <div className="col col-md-5 text-right" style={{ padding: 30, margin: 0 }} >
-                                <CarbonDatePicker onChange={dateTimeStamp => {
+                                <CarbonDatePicker date={this.state.requiredDate} onChange={dateTimeStamp => {
                                     let date = new Date(dateTimeStamp)
-                                    let formatDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDay()}`
-                                    // console.log(this.state.isShippingDate, this.state.shippingDate)
-                                    this.setState({
-                                        shippingDate: formatDate,
-                                        isShippingDate: true
-                                    })
+                                    let formatDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+                                    // console.log(this.state.isRequiredDate, this.state.requiredDate)
+                                    let dateNow = new Date()
+                                    dateNow.setDate(dateNow.getDate() + 6)
+                                    this.setState(prevState => ({
+                                        requiredDate: formatDate,
+                                    }))
                                     }
                                 } />
+                            </div>
+                        </div>
+                        <div className="row" key="commentField">
+                            <div className="col col-md-12 text-right" style={{ paddingLeft: 20, margin: 0 }} >
+                                <MDBInput style={{borderRadius: "5px"}} label="Comments" outline name="comments" onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="textarea" value={this.state.comments} />
                             </div>
                         </div>
                         {/* <hr className="my-2" /> */}
@@ -130,19 +138,24 @@ export default class CartModals extends React.Component {
 
     onChange = e => {
         const { name, value } = e.target
-        let val = parseInt(value)
-        if (isNaN(val)) {
-            val = 0
-        } else if (value.length > 1 && value.startsWith("0")) {
-            val = parseInt(value.substring(1))
-        }
-        if (val >= this.state.cart[name]["quantityInStock"]) {
-            val = this.state.cart[name]["quantityInStock"]
-        }
-        this.onChangeCartValue(name, val)
-        this.setState(prevState => ({
+        if(name !== 'comments'){
+            let val = parseInt(value)
+            if (isNaN(val)) {
+                val = 0
+            } else if (value.length > 1 && value.startsWith("0")) {
+                val = parseInt(value.substring(1))
+            }
+            if (val >= this.state.cart[name]["quantityInStock"]) {
+                val = this.state.cart[name]["quantityInStock"]
+            }
+            this.onChangeCartValue(name, val)
+            this.setState(prevState => ({
             cart: { ...prevState.cart, ...{ [name]: { ...prevState.cart[name], ...{ value: val } } } }
         }))
+        }else{
+            this.setState({ [name]: value })
+        }
+        
     }
 
     mapData(data) {
@@ -161,7 +174,18 @@ export default class CartModals extends React.Component {
     }
 
     SubmitBtn = (e) => {
-        console.log(this.state)
+        let sumProduct = 0
+        let credit = this.state.cartCustomer.creditLimit?this.state.cartCustomer.creditLimit:0
+        for(let product in this.state.cart){
+            sumProduct += this.state.cart[product].buyPrice * this.state.cart[product].value
+        }
+        let money = credit - sumProduct
+        if(money < 0){
+            alert(`can't order: need ${parseFloat(-money).toFixed(2)}$`)
+        }else{
+            window.$Connector.addBill(this.state)
+        }
+        console.log(sumProduct)
     }
 
     render() {
@@ -178,9 +202,16 @@ export default class CartModals extends React.Component {
                                 {Object.keys(this.state.cart).map(key => this.mapData(this.state.cart[key]))}
                                 {this.sumPrice()}
                                 <hr className="my-2" />
+                                {
+                                (Object.keys(this.state.cartCustomer).length)?
                                 <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
                                     <MDBBtn name="submit" onClick={this.SubmitBtn} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
                                 </Style>
+                                :
+                                <>
+                                </>
+                                }
+                                
                                 <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
                                     <MDBBtn color="secondary" name="close" onClick={this.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>
                                 </Style>

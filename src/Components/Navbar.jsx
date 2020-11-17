@@ -81,6 +81,8 @@ export default class Navbar extends Component {
                   <MDBDropdownItem><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddModals("customer")} >Add Customer</span></MDBDropdownItem>
                   <MDBDropdownItem divider />
                   <MDBDropdownItem><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddModals("employee")} >Add Employee</span></MDBDropdownItem>
+                  <MDBDropdownItem divider />
+                  <MDBDropdownItem><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={(e) => this.toggleAddModals("promotion")} >Add Promotion</span></MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </li>

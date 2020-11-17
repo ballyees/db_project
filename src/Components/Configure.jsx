@@ -23,13 +23,24 @@ export default class Configure {
                     "state": '',
                     "postalCode": '',
                     "addressLine2": '',
-                    "creditLimit": 0
+                    "creditLimit": 0,
+                    "salesRepEmployeeNumber": window.$Connector.username
                 }
             case "product":
                 return {
                     "quantityInStock": 0,
                     "buyPrice": 0,
-                    "MSRP":0
+                    "MSRP":0,
+                    "productScale": 1
+                }
+            case "promotion":
+                let date = new Date()
+                let formatDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+                return {
+                    is1get1: false,
+                    startDate: formatDate,
+                    endDate: formatDate
+                    // promoCode, startDate, endDate, discount, description, is1get1
                 }
             case "employee":
                 return {

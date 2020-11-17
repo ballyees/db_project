@@ -4,6 +4,11 @@ export default class Connector {
     #username = '';
     #type = '';
     #isLogin = false;
+    editFn = {
+        customer: this.editCustomer,
+        product: this.editProduct,
+        employee: this.editEmployee
+    }
     
     static instance = null;
     
@@ -20,6 +25,10 @@ export default class Connector {
 
     get type(){
         return this.#type
+    }
+    
+    get username(){
+        return this.#username
     }
 
     toString(){
@@ -68,8 +77,64 @@ export default class Connector {
         })
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                          PRODUCT
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async getProducts(){
         return await fetch(ConfigureConnector.proxyAnywhereAndUrlProducts).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
+    }
+
+    async addProduct(data){
+        let options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(data)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlProducts, options).then(response => {
+            return response.ok
+        })
+    }
+
+
+    async editProduct(data){
+        let selEditCol = {}
+        for(let col in ConfigureConnector.editDataDefaultValue['product']){
+            selEditCol[col] = data[col]?data[col]:ConfigureConnector.editDataDefaultValue['product'][col]
+        }
+        console.log(selEditCol)
+        let options = {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(selEditCol)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlProducts+`${data[ConfigureConnector.productKey]}`, options).then(response => {
+            return response.ok
+        })
+    }
+
+    async deleteProduct(productCode){
+        let options = {
+            method: 'DELETE'
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlProducts+productCode, options).then(response => {
+            return response.ok
+        })
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                          CUSTOMER
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getCustomers(){
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlCustomers).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
     }
 
     async addCustomer(data){
@@ -87,27 +152,106 @@ export default class Connector {
         })
     }
 
-    async editProduct(data){
-        return null
-    }
-
-    async deleteProduct(productCode){
-        return null
-    }
-
-    async getCustomers(){
-        return await fetch(ConfigureConnector.proxyAnywhereAndUrlCustomers).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
-    }
-
     async editCustomer(data){
-        return null
+        let selEditCol = {}
+        for(let col in ConfigureConnector.editDataDefaultValue['customer']){
+            selEditCol[col] = data[col]?data[col]:ConfigureConnector.editDataDefaultValue['customer'][col]
+        }
+        console.log(selEditCol)
+        let options = {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(selEditCol)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlCustomers+`${data[ConfigureConnector.customerKey]}`, options).then(response => {
+            return response.ok
+        })
     }
 
     async deleteCustomer(customerNumber){
-        return null
+        let options = {
+            method: 'DELETE'
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlCustomers+customerNumber, options).then(response => {
+            return response.ok
+        })
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                          EMPLOYEE
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     async getEmployees(){
         return await fetch(ConfigureConnector.proxyAnywhereAndUrlEmployees).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
+    }
+
+    async addEmployee(data){
+        let options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(data)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlEmployees, options).then(response => {
+            return response.ok
+        })
+    }
+
+    async deleteEmployee(employeeNumber){
+        let options = {
+            method: 'DELETE'
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlEmployees+employeeNumber, options).then(response => {
+            return response.ok
+        })
+    }
+
+    async editEmployee(data){
+        let selEditCol = {}
+        for(let col in ConfigureConnector.editDataDefaultValue['employee']){
+            selEditCol[ConfigureConnector.editDataDefaultValue['employee'][col]] = data[col]?data[col]:ConfigureConnector.editDataDefaultValue['employee'][col]
+        }
+        let options = {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(selEditCol)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlEmployees+`${data[ConfigureConnector.employeeKey]}`, options).then(response => {
+            return response.ok
+        })
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                          BILL
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async addBill(data){
+        let cart = data.cart
+        let customerNumber = data.cartCustomer.customerNumber
+        // let promotion = data.cartPromotion
+        console.log(data)
+        let options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength({cart: cart, customerNumber: customerNumber}),
+            },
+            mode: 'cors',
+            body: JSON.stringify(data)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlBill, options).then(response => {
+            return response.ok
+        })
     }
 }

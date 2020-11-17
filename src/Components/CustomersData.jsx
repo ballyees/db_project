@@ -23,6 +23,10 @@ export default class CustomersData extends React.Component {
         }))
     }
 
+    setLoading = () => {
+        this.setState({isLoading: true, collapseID: ""})
+    }
+
     toggleCollapse = collapseID => () => {
         this.setState(prevState => ({
             collapseID: prevState.collapseID !== collapseID ? collapseID : ""
@@ -30,14 +34,14 @@ export default class CustomersData extends React.Component {
         console.log(this.state.collapseID)
     }
 
+    fetch_data = async () => await window.$Connector.getCustomers().then(
+        data => {
+            this.setState({ data: data, isLoading: false, keysData: Object.keys(data[0]) })
+        }
+    )
+
     componentDidMount() {
-        let fetch_data = async () => await window.$Connector.getCustomers().then(
-            data => {
-                this.setState({ data: data, isLoading: false, keysData: Object.keys(data[0]) })
-                // console.log(Object.keys(data[0]))
-            }
-        )
-        fetch_data()
+        this.fetch_data()
     }
 
     onChange = e => {
@@ -77,6 +81,7 @@ export default class CustomersData extends React.Component {
 
     onClickDelete = () => {
         if (window.confirm(`Are you sure to delete id: ${this.state.collapseID}`)) {
+            window.$Connector.deleteCustomer(this.state.collapseID)
             let filter = (data) => !(data["customerNumber"] === this.state.collapseID)
             this.setState(prevState => ({
                 data: prevState.data.filter(d => filter(d)),
@@ -187,7 +192,7 @@ export default class CustomersData extends React.Component {
                                     </MDBContainer>
                                 </h4>
                                 {this.state.data.filter(data => this.filterData(data)).map(data => (this.mapData(data)))}
-                                {this.state.modalsEdit ? <EditModals type="customer" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} /> : <></>}
+                                {this.state.modalsEdit ? <EditModals type="customer" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} submitFn={{setLoading:this.setLoading.bind(this), fetch: this.fetch_data.bind(this)}} /> : <></>}
                             </div>
                         </div>
                     </div>
