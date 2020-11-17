@@ -9,6 +9,7 @@ export default class ConfigureConnector {
     static urlCustomers = "http://127.0.0.1:8000/v1/api/store/customer/"
     static urlEmployees = "http://127.0.0.1:8000/v1/api/store/employee/"
     static urlBill = "http://127.0.0.1:8000/v1/api/store/bill/"
+    static urlProductsStock = "http://127.0.0.1:8000/v1/api/store/stock/"
     
     static proxyHost = "http://127.0.0.1:8000/"
     static proxyAnywhereLocal = "http://127.0.0.1:8080/"
@@ -16,6 +17,7 @@ export default class ConfigureConnector {
 
     static proxyAnywhereAndUrlUserLogin = ConfigureConnector.proxyAnywhereLocal + ConfigureConnector.urlUserLogin
     static proxyAnywhereAndUrlProducts = ConfigureConnector.proxyAnywhereLocal + ConfigureConnector.urlProducts
+    static proxyAnywhereAndUrlProductsStock = ConfigureConnector.proxyAnywhereLocal + ConfigureConnector.urlProductsStock
     static proxyAnywhereAndUrlCustomers = ConfigureConnector.proxyAnywhereLocal + ConfigureConnector.urlCustomers
     static proxyAnywhereAndUrlEmployees = ConfigureConnector.proxyAnywhereLocal + ConfigureConnector.urlEmployees
     static proxyAnywhereAndUrlBill = ConfigureConnector.proxyAnywhereLocal + ConfigureConnector.urlBill
@@ -23,6 +25,7 @@ export default class ConfigureConnector {
     static customerKey = "customerNumber"
     static productKey = "productCode"
     static employeeKey = "employeeNumber"
+    static billKey = "orderNumber"
     static selEditColCustomer = ["customerNumber", "customerName", "contactLastName", "contactFirstName", "phone", "addressLine1", "addressLine2", "city", "state", "postalCode", "country", "salesRepEmployeeNumber", "creditLimit"]
     static selEditColProduct = ["productCode", "productName", "productLine", "productScale", "productVendor", "productDescription", "quantityInStock", "buyPrice", "MSRP"]
     static selEditColEmployee = ["employeeNumber", "lastName", "firstName", "extension", "email", "officeCode", "reportsTo", "jobTitle"]

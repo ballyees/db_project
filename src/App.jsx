@@ -2,6 +2,7 @@ import React from 'react';
 
 import './App.css';
 import 'mdbreact/dist/css/mdb.css';
+import { createBrowserHistory } from "history";
 
 // import component
 import Login from './Components/Login';
@@ -10,6 +11,8 @@ import Register from './Components/Register';
 import Data from './Components/Data';
 import Customers from './Components/Customers';
 import Employees from './Components/Employees';
+import Bills from './Components/Bills';
+
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
@@ -19,7 +22,8 @@ export default class App extends React.Component {
 
 		this.state = {
 			loginSuccess: false,
-			cart: []
+			cart: [],
+			history: createBrowserHistory()
 		}
 	}
 
@@ -82,6 +86,7 @@ export default class App extends React.Component {
 							(props) =>
 								this.state.loginSuccess ?
 									<Products loginSuccess={this.state.loginSuccess}
+										history={this.state.history}
 										logout={this.logout}
 										state={this.state}
 										addProductToCart={this.addProductToCart}
@@ -103,6 +108,25 @@ export default class App extends React.Component {
 							(props) =>
 								this.state.loginSuccess ?
 									<Employees loginSuccess={this.state.loginSuccess}
+										history={this.state.history}
+										logout={this.logout}
+										state={this.state}
+										addProductToCart={this.addProductToCart}
+										onChangeCartValue={this.onChangeCartValue.bind(this)}
+										fn={{
+											onChangeCartValue: this.onChangeCartValue.bind(this),
+											addProductToCart: this.addProductToCart.bind(this),
+											logout: this.logout.bind(this)
+										}} />
+									:
+									<Redirect to="/model-figure/login" />
+						} />
+					<Route exact path="/model-figure/bills"
+						render={
+							(props) =>
+								this.state.loginSuccess ?
+									<Bills loginSuccess={this.state.loginSuccess}
+										history={this.state.history}
 										logout={this.logout}
 										state={this.state}
 										addProductToCart={this.addProductToCart}
@@ -120,6 +144,7 @@ export default class App extends React.Component {
 							(props) =>
 								this.state.loginSuccess ?
 									<Customers loginSuccess={this.state.loginSuccess}
+										history={this.state.history}
 										logout={this.logout}
 										state={this.state}
 										addProductToCart={this.addProductToCart}

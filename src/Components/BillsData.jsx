@@ -3,9 +3,9 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCollapse, MDBBtn } from "mdb
 import LoadingPage from './LoadingPage';
 import EditModals from './EditModals';
 
-export default class EmployeesData extends React.Component {
+export default class BillsData extends React.Component {
     constructor(props) {
-        super(props);
+        super();
         this.state = {
             data: [],
             options: [],
@@ -34,8 +34,9 @@ export default class EmployeesData extends React.Component {
         console.log(this.state.collapseID)
     }
 
-    fetch_data = async () => await window.$Connector.getEmployees().then(
+    fetch_data = async () => await window.$Connector.getAllBills().then(
         data => {
+            console.log(Object.keys(data[0]))
             this.setState({ data: data, isLoading: false, keysData: Object.keys(data[0]) })
         }
     )
@@ -70,30 +71,12 @@ export default class EmployeesData extends React.Component {
     }
 
     onClickEdit = () => {
-        let index = this.state.data.findIndex(d => d["employeeNumber"] === this.state.collapseID)
+        let index = this.state.data.findIndex(d => d["orderNumber"] === this.state.collapseID)
         if (Boolean(~index)) {
             this.setState(prevState => ({
                 modalsEdit: !prevState.modalsEdit,
                 dataForModals: { ...this.state.data[index] }
             }))
-        }
-    }
-
-    onClickDelete = () => {
-        if (window.confirm(`Are you sure to delete id: ${this.state.collapseID}`)) {
-            window.$Connector.deleteEmployee(this.state.collapseID)
-            let filter = (data) => !(data["employeeNumber"] === this.state.collapseID)
-            this.setState(prevState => ({
-                data: prevState.data.filter(d => filter(d)),
-                collapseID: ""
-            }))
-        }
-    }
-
-    onClickAdd = () => {
-        let index = this.state.data.findIndex(d => d["employeeNumber"] === this.state.collapseID)
-        if (Boolean(~index)) {
-            this.addCustomerToCart({ ...this.state.data[index] })
         }
     }
 
@@ -112,33 +95,29 @@ export default class EmployeesData extends React.Component {
 
     mapData(data) {
         return (
-            <div className="row" key={data["employeeNumber"]}>
+            <div className="row" key={data["orderNumber"]}>
                 <div className="col-lg-12 col-md-12">
-                    <MDBBtn color="primary" onClick={this.toggleCollapse(data["employeeNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
+                    <MDBBtn color="primary" onClick={this.toggleCollapse(data["orderNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
                         <div className="d-flex justify-content-between">
-                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["employeeNumber"]}] {`${data["firstName"]} ${data["lastName"]}`}</div>
-                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >{data["jobTitle"]}</div>
+                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["orderNumber"]}] Customer Number: {data["customerNumber"]}</div>
+                            <div className="p-2 col-example text-left" style={{ padding: 0 }} >Status: {data["status"]}</div>
                         </div>
                     </MDBBtn>
-                    <MDBCollapse id={String(data["employeeNumber"])} isOpen={this.state.collapseID === data["employeeNumber"]} >
+                    <MDBCollapse id={String(data["orderNumber"])} isOpen={this.state.collapseID===data["orderNumber"]} >
                         <div className="card">
                             <div className="card-body">
                                 <p className="card-text text-left" style={{ fontSize: "16px" }}>
-                                Extension : {data["extension"]}<br />
-                                Email : {data["email"]} <br />
-                                Office Code : {data["officeCode"]} <br />
-                                    {data["reportsTo"] ? "Reports To : " + data["reportsTo"] : null}{data["reportsTo"] ? <br /> : null}
-                                    {data["reportsTo"] ? `Reports To (Name) : ${data["firstName_reportTo"]} ${data["lastName_reportTo"]}` : null}{data["reportsTo"] ? <br /> : null}
-                                Job Title : {data["jobTitle"]} <br />
+                                    Order Number : {data["orderNumber"]}<br />
+                                    Order Date : {data["orderDate"]} <br />
+                                    Required Date : {data["requiredDate"]} <br />
+                                    {data["shippedDate"] ? "Shipped Date : " + data["shippedDate"] : null}{data["shippedDate"] ? <br /> : null}
+                                    {data["comments"] ? "Comments : " + data["comments"] : null}{data["comments"] ? <br /> : null}
                                 </p>
                                 <hr />
                                 <MDBContainer>
                                     <MDBRow>
-                                        <MDBCol sm="6">
+                                        <MDBCol sm="12">
                                             <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} outline color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
-                                        </MDBCol>
-                                        <MDBCol sm="6">
-                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} outline color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBContainer>
@@ -170,7 +149,7 @@ export default class EmployeesData extends React.Component {
                                     </MDBContainer>
                                 </h4>
                                 {this.state.data.filter(data => this.filterData(data)).map(data => (this.mapData(data)))}
-                                {this.state.modalsEdit ? <EditModals type="employee" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} submitFn={{setLoading:this.setLoading.bind(this), fetch: this.fetch_data.bind(this)}} /> : <></>}
+                                {this.state.modalsEdit ? <EditModals type="bill" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} submitFn={{setLoading:this.setLoading.bind(this), fetch: this.fetch_data.bind(this)}} /> : <></>}
                             </div>
                         </div>
                     </div>

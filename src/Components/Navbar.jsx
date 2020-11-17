@@ -67,6 +67,8 @@ export default class Navbar extends Component {
                   <MDBDropdownItem><Link to="/model-figure/customers" style={{display: "inline"}} ><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={this.toggleMenu}>Customers</span></Link></MDBDropdownItem>
                   <MDBDropdownItem divider />
                   <MDBDropdownItem><Link to="/model-figure/employees" style={{display: "inline"}} ><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={this.toggleMenu}>Employees</span></Link></MDBDropdownItem>
+                  <MDBDropdownItem divider />
+                  <MDBDropdownItem><Link to="/model-figure/bills" style={{display: "inline"}} ><span className="active js-scroll-trigger" style={{color: "#212529"}} onClick={this.toggleMenu}>Bills</span></Link></MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </li>
@@ -88,7 +90,7 @@ export default class Navbar extends Component {
             </li>
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               {this.state.cartModals ?
-                <CartModals open={this.state.cartModals} toggle={this.toggleCart} style={{ borderRadius: "20px" }} />
+                <CartModals open={this.state.cartModals} toggle={this.toggleCart} style={{ borderRadius: "20px" }} history={this.props.history} />
                 :
                 <MDBBtn onClick={this.toggleCart} outline color="secondary" style={{ borderRadius: "20px", textAlign: "" }} name="cart">cart</MDBBtn>
               }

@@ -14,6 +14,7 @@ export default class ProductsData extends React.Component {
             search : "",
             modalsEdit: false,
             dataForModals: {},
+            type: "product"
         };
     }
 
@@ -71,7 +72,21 @@ export default class ProductsData extends React.Component {
         if (Boolean(~index)){
             this.setState(prevState => ({
                 modalsEdit: !prevState.modalsEdit,
-                dataForModals: {...this.state.data[index]}
+                dataForModals: {...this.state.data[index]},
+                type: "product"
+            }))
+        }
+    }
+
+    onClickAddStock = () => {
+        let index = this.state.data.findIndex(d => d["productCode"] === this.state.collapseID)
+        if (Boolean(~index)){
+            let data = {...this.state.data[index]}
+            data["quantityInStock"] = 1
+            this.setState(prevState => ({
+                modalsEdit: !prevState.modalsEdit,
+                dataForModals: data,
+                type: "stock"
             }))
         }
     }
@@ -119,7 +134,6 @@ export default class ProductsData extends React.Component {
             search: "",
             collapseID: "",
         })
-        localStorage.clear()
     }
 
     onPressEnter = e =>{
@@ -152,13 +166,16 @@ export default class ProductsData extends React.Component {
                                 <hr/>
                                 <MDBContainer>
                                     <MDBRow>
-                                        <MDBCol sm="4">
+                                        <MDBCol sm="3">
                                             <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="info" onClick={this.onClickAdd} name="add">add to cart</MDBBtn>
                                         </MDBCol>
-                                        <MDBCol sm="4">
+                                        <MDBCol sm="3">
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="secondary" onClick={this.onClickAddStock} name="edit">add stock</MDBBtn>
+                                        </MDBCol>
+                                        <MDBCol sm="3">
                                             <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
                                         </MDBCol>
-                                        <MDBCol sm="4">
+                                        <MDBCol sm="3">
                                             <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
@@ -191,7 +208,7 @@ export default class ProductsData extends React.Component {
                                     </MDBContainer>
                                 </h4>
                                 {this.state.data.filter(data => this.filterData(data)).map( data => (this.mapData(data)))}
-                                {this.state.modalsEdit?<EditModals type="product" open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} submitFn={{setLoading:this.setLoading.bind(this), fetch: this.fetch_data.bind(this)}} />:<></>}
+                                {this.state.modalsEdit?<EditModals type={this.state.type} open={this.state.modalsEdit} data={this.state.dataForModals} toggle={this.toggleModal.bind(this)} submitFn={{setLoading:this.setLoading.bind(this), fetch: this.fetch_data.bind(this)}} />:<></>}
                             </div>
                         </div>
                     </div>

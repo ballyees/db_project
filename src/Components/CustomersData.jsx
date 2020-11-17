@@ -117,7 +117,6 @@ export default class CustomersData extends React.Component {
             search: "",
             collapseID: "",
         })
-        localStorage.clear()
     }
 
     onPressEnter = e => {

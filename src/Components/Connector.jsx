@@ -7,7 +7,9 @@ export default class Connector {
     editFn = {
         customer: this.editCustomer,
         product: this.editProduct,
-        employee: this.editEmployee
+        employee: this.editEmployee,
+        stock: this.addStock,
+        bill: this.editBill,
     }
     
     static instance = null;
@@ -99,6 +101,20 @@ export default class Connector {
         })
     }
 
+    async addStock(data){
+        let options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(data)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlProductsStock, options).then(response => {
+            return response.ok
+        })
+    }
 
     async editProduct(data){
         let selEditCol = {}
@@ -236,16 +252,40 @@ export default class Connector {
     //                                                          BILL
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    async getAllBills(){
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlBill).then(response => response.json()).then(data => data[ConfigureConnector.keyResponseData])
+    }
+    async editBill(data){
+        let selEditCol = {...data}
+        let date = new Date()
+        selEditCol['shippedDate'] = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+        let options = {
+            method: 'PUT',
+            headers: {
+                "Content-Type": 'application/json',
+                "Content-Length": Buffer.byteLength(data),
+            },
+            mode: 'cors',
+            body: JSON.stringify(selEditCol)
+        }
+        return await fetch(ConfigureConnector.proxyAnywhereAndUrlBill+`${data[ConfigureConnector.billKey]}`, options).then(response => {
+            return response.ok
+        })
+    }
+
     async addBill(data){
         let cart = data.cart
         let customerNumber = data.cartCustomer.customerNumber
+        let requiredDate = data.requiredDate
+        let comments = data.comments
         // let promotion = data.cartPromotion
+        data = {cart: cart, customerNumber: customerNumber, requiredDate: requiredDate, comments: comments, price: data.price}
         console.log(data)
         let options = {
             method: 'POST',
             headers: {
                 "Content-Type": 'application/json',
-                "Content-Length": Buffer.byteLength({cart: cart, customerNumber: customerNumber}),
+                "Content-Length": Buffer.byteLength(data),
             },
             mode: 'cors',
             body: JSON.stringify(data)

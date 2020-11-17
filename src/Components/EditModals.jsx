@@ -1,19 +1,18 @@
 import React from 'react'
-import { MDBContainer, MDBJumbotron, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
+import { MDBContainer, MDBJumbotron, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle, MDBDropdown } from 'mdbreact';
 import Style from 'style-it'
 
 export default class EditModals extends React.Component {
     constructor(props) {
         super()
         let data_clean = props.data
-        for(let key in data_clean){
-            data_clean[key] = data_clean[key]?data_clean[key]:""
+        for (let key in data_clean) {
+            data_clean[key] = data_clean[key] ? data_clean[key] : ""
         }
-        console.log(data_clean)
         this.state = ({
             ...{
                 modal: false,
-                type: props.type, //customer, product, employee, promotion
+                type: props.type, //customer, product, employee, promotion, stock, bill
             }, ...data_clean
         })
         console.log("props con:", props, this.state)
@@ -22,27 +21,34 @@ export default class EditModals extends React.Component {
     onSubmit = e => {
         // this.SubmitBtn()
         this.props.toggle()
-        let data = {...this.state}
+        let data = { ...this.state }
         delete data.modal
         delete data.type
         this.props.submitFn.setLoading()
         let ed = async () => await window.$Connector.editFn[this.state.type](data).then(
             res => {
-                this.props.submitFn.fetch()
+                if (res) {
+                    this.props.submitFn.fetch()
+                }
             }
         )
         ed()
-        
+
+    }
+
+    toggleMenu = status => {
+        console.log(status)
+        this.setState({status: status})
     }
 
     onChange = e => {
         const { name, value } = e.target
         let val = value
-        if(name === "creditLimit"){
+        if (name === "creditLimit") {
             if (val.length > 1 && val.startsWith("0")) {
                 val = parseFloat(val.substring(1))
             }
-            val = (val<0)?"0":`${val}`
+            val = (val < 0) ? "0" : `${val}`
         }
         this.setState({
             [name]: val
@@ -107,6 +113,89 @@ export default class EditModals extends React.Component {
                         </MDBModal>
                     </div>
                 )
+            case "stock":
+                return (
+                    <div>
+                        <MDBModal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
+                            <MDBModalHeader toggle={this.props.toggle} style={{ color: "rgb(0, 0, 0)" }}></MDBModalHeader>
+                            <MDBModalBody>
+                                <MDBContainer style={{ color: "rgb(0, 0, 0)" }}>
+                                    <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
+                                        <h2>Add Stock</h2>
+                                        <div className="row">
+                                            <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput disabled label="Product Code" outline name="productCode" value={this.state["productCode"]} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-6 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput disabled label="Product Name" outline name="productName" value={this.state["productName"]} onKeyPress={this.KeyPressEnter} />
+                                            </div>
+                                            <div className="col col-md-12 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                                <MDBInput label="Quantity In Stock" outline name="quantityInStock" value={this.state["quantityInStock"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="number" min={0} />
+                                            </div>
+                                        </div>
+                                        <hr className="my-2" />
+                                        <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
+                                            <MDBBtn name="submit" onClick={this.onSubmit} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                        </Style>
+                                        <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
+                                            <MDBBtn color="secondary" name="close" onClick={this.props.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>
+                                        </Style>
+                                    </MDBJumbotron>
+                                </MDBContainer>
+                            </MDBModalBody>
+                        </MDBModal>
+                    </div>
+                )
+            case "bill":
+                return (<div>
+                    <MDBModal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
+                        <MDBModalHeader toggle={this.props.toggle} style={{ color: "rgb(0, 0, 0)" }}></MDBModalHeader>
+                        <MDBModalBody>
+                            <MDBContainer style={{ color: "rgb(0, 0, 0)" }}>
+                                <MDBJumbotron style={{ width: "100%", borderRadius: "7px" }}>
+                                    <h2>Edit Bill</h2>
+                                    <br></br>
+                                    <div className="row">
+                                        <div className="col col-md-5 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                            <MDBInput disabled label="Order Number" outline name="orderNumber" value={this.state["orderNumber"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                        </div>
+                                        <div className="col col-md-7 text-right" style={{ paddingTop: 15, margin: 0 }} >
+                                            <MDBDropdown>
+                                                <MDBDropdownToggle color="primary" outline style={{ borderRadius: "20px", width: "100%" }} >
+                                                    {this.state.status}
+                                                </MDBDropdownToggle>
+                                                <MDBDropdownMenu basic style={{ width: "100%" }}>
+                                                    <MDBDropdownItem onClick={() => this.toggleMenu("Cancelled")}><span className="active js-scroll-trigger" style={{ color: "#212529" }}>Cancelled</span></MDBDropdownItem>
+                                                    <MDBDropdownItem divider />
+                                                    <MDBDropdownItem onClick={() => this.toggleMenu("Disputed")}><span className="active js-scroll-trigger" style={{ color: "#212529" }}>Disputed</span></MDBDropdownItem>
+                                                    <MDBDropdownItem divider />
+                                                    <MDBDropdownItem onClick={() => this.toggleMenu("In Process")}><span className="active js-scroll-trigger" style={{ color: "#212529" }}>In Process</span></MDBDropdownItem>
+                                                    <MDBDropdownItem divider />
+                                                    <MDBDropdownItem onClick={() => this.toggleMenu("On Hold")}><span className="active js-scroll-trigger" style={{ color: "#212529" }}>On Hold</span></MDBDropdownItem>
+                                                    <MDBDropdownItem divider />
+                                                    <MDBDropdownItem onClick={() => this.toggleMenu("Resolved")}><span className="active js-scroll-trigger" style={{ color: "#212529" }}>Resolved</span></MDBDropdownItem>
+                                                    <MDBDropdownItem divider />
+                                                    <MDBDropdownItem onClick={() => this.toggleMenu("Shipped")}><span className="active js-scroll-trigger" style={{ color: "#212529" }}>Shipped</span></MDBDropdownItem>
+                                                </MDBDropdownMenu>
+                                            </MDBDropdown>
+                                        </div>
+                                        <div className="col col-md-12 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
+                                            <MDBInput label="Comments" outline name="comments" value={this.state["comments"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} type="textarea" />
+                                        </div>
+                                    </div>
+                                    <hr className="my-2" />
+                                    <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
+                                        <MDBBtn name="submit" onClick={this.onSubmit} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                    </Style>
+                                    <Style>{`.closed:active {background-color: white;transform: translateY(4px);}`}
+                                        <MDBBtn color="secondary" name="close" onClick={this.props.toggle} outline style={{ borderRadius: "20px", width: "100%" }} className="closed" >Close</MDBBtn>
+                                    </Style>
+                                </MDBJumbotron>
+                            </MDBContainer>
+                        </MDBModalBody>
+                    </MDBModal>
+                </div>
+                )
             case "employee":
                 return (
                     <div>
@@ -140,7 +229,7 @@ export default class EditModals extends React.Component {
                                             <div className="col col-md-6 text-left" style={{ padding: "0px 0px 0px", margin: 0 }} >
                                                 <MDBInput label="Extension" outline name="extension" value={this.state["extension"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                             </div>
-                                            
+
                                             <div className="col col-md-6 text-right" style={{ padding: "0px 0px 0px", margin: 0 }} >
                                                 <MDBInput label="Reports To" outline name="reportsTo" value={this.state["reportsTo"]} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                             </div>

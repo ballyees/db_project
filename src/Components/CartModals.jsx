@@ -37,6 +37,12 @@ export default class CartModals extends React.Component {
         }
     }
 
+    clearCart(){
+        // localStorage.clear();
+        localStorage.removeItem('cart')
+        this.props.toggle(undefined)
+    }
+
     sumPrice() {
         let key = Object.keys(this.state.cart)
         if (Boolean(key.length)) {
@@ -173,6 +179,14 @@ export default class CartModals extends React.Component {
             </div>)
     }
 
+    showClearBtn(){
+        return (Object.keys(this.state.cartCustomer).length !== 0) || (Object.keys(this.state.cart).length !== 0)
+    }
+
+    showSubmitBtn(){
+        return (Object.keys(this.state.cartCustomer).length !== 0) && (Object.keys(this.state.cart).length !== 0)
+    }
+
     SubmitBtn = (e) => {
         let sumProduct = 0
         let credit = this.state.cartCustomer.creditLimit?this.state.cartCustomer.creditLimit:0
@@ -183,7 +197,16 @@ export default class CartModals extends React.Component {
         if(money < 0){
             alert(`can't order: need ${parseFloat(-money).toFixed(2)}$`)
         }else{
-            window.$Connector.addBill(this.state)
+            let ed = async () => await window.$Connector.addBill({...this.state, price: sumProduct.toFixed(2)}).then(
+                (res) => {
+                    if(res){
+                        this.clearCart()
+                        window.location.reload(false)
+                        alert('payments success')
+                    }
+                }
+            )
+            ed()
         }
         console.log(sumProduct)
     }
@@ -201,12 +224,24 @@ export default class CartModals extends React.Component {
                                 {/* {this.props.cart.map(data => this.mapData(data))} */}
                                 {Object.keys(this.state.cart).map(key => this.mapData(this.state.cart[key]))}
                                 {this.sumPrice()}
+                                {this.showClearBtn()?
+                                <>
+                                    <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
+                                        <MDBBtn name="clear" onClick={this.clearCart.bind(this)} outline color="danger" style={{ borderRadius: "20px", width: "100%" }} className="submit">CLEAR DATA IN CART</MDBBtn>
+                                    </Style>
+                                </>
+                                :
+                                <>
+                                </>
+                                }
                                 <hr className="my-2" />
                                 {
-                                (Object.keys(this.state.cartCustomer).length)?
-                                <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
-                                    <MDBBtn name="submit" onClick={this.SubmitBtn} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
-                                </Style>
+                                this.showSubmitBtn()?
+                                <>
+                                    <Style>{`.submit:active {background-color: white;transform: translateY(4px);}`}
+                                        <MDBBtn name="submit" onClick={this.SubmitBtn} outline color="info" style={{ borderRadius: "20px", width: "100%" }} className="submit">Submit</MDBBtn>
+                                    </Style>
+                                </>
                                 :
                                 <>
                                 </>
