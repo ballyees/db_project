@@ -124,7 +124,7 @@ export default class CustomersData extends React.Component {
             e.preventDefault()
         }
     }
-
+ 
     mapData(data) {
         return (
             <div className="row" key={data["customerNumber"]}>
