@@ -3,6 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBCollapse, MDBBtn } from "mdb
 import LoadingPage from './LoadingPage';
 import EditModals from './EditModals';
 
+
 export default class BillsData extends React.Component {
     constructor(props) {
         super();
@@ -97,7 +98,7 @@ export default class BillsData extends React.Component {
         return (
             <div className="row" key={data["orderNumber"]}>
                 <div className="col-lg-12 col-md-12">
-                    <MDBBtn color="primary" onClick={this.toggleCollapse(data["orderNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
+                    <MDBBtn color="orange" onClick={this.toggleCollapse(data["orderNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
                         <div className="d-flex justify-content-between">
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["orderNumber"]}] Customer Number: {data["customerNumber"]}</div>
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >Status: {data["status"]}</div>
@@ -117,7 +118,7 @@ export default class BillsData extends React.Component {
                                 <MDBContainer>
                                     <MDBRow>
                                         <MDBCol sm="12">
-                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} outline color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
+                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBContainer>

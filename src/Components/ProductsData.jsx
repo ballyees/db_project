@@ -146,7 +146,7 @@ export default class ProductsData extends React.Component {
         return (
             <div className="row" key={data["productCode"]}>
                 <div className="col-lg-12 col-md-12">
-                    <MDBBtn color="primary" onClick={this.toggleCollapse(data["productCode"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
+                    <MDBBtn color="orange" onClick={this.toggleCollapse(data["productCode"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
                         <div className="d-flex justify-content-between">
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["productCode"]}] {data["productName"]}</div>
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >Stock: {window.$nf.format(data["quantityInStock"])}</div>
@@ -167,16 +167,16 @@ export default class ProductsData extends React.Component {
                                 <MDBContainer>
                                     <MDBRow>
                                         <MDBCol sm="3">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="info" onClick={this.onClickAdd} name="add">add to cart</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} color="info" onClick={this.onClickAdd} name="add">add to cart</MDBBtn>
                                         </MDBCol>
                                         <MDBCol sm="3">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="secondary" onClick={this.onClickAddStock} name="edit">add stock</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} color="secondary" onClick={this.onClickAddStock} name="edit">add stock</MDBBtn>
                                         </MDBCol>
                                         <MDBCol sm="3">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
                                         </MDBCol>
                                         <MDBCol sm="3">
-                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} outline color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
+                                            <MDBBtn type="button" style={{borderRadius: "20px", width: "100%"}} color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBContainer>

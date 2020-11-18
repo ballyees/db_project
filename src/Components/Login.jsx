@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import './Login-From-Dark.css'
-import starSky from './img/n_star-sky.jpg'
-import FindSVG from './img/find2.svg'
+import starSky from './img/egg-substitutes.jpg'
+import figer from './img/FIGeR.png'
 
 import { MDBInput } from "mdbreact";
 
@@ -65,7 +65,7 @@ export default class Login extends React.Component{
     render(){
         
         return (
-            <div style={{backgroundImage: `url(${starSky})`, backgroundSize: "cover", position: "relative", height: "1000px", width: "100%"}}>
+            <div style={{backgroundImage: `url(${starSky})`, backgroundSize: "cover", position: "relative", height: "752.5px", width: "100%"}}>
                 <div className="container">
                     <div className="row justify-content-center" style={{paddingTop: "5%"}}>
                         <div className="col-md-9 col-lg-12 col-xl-6">
@@ -73,20 +73,25 @@ export default class Login extends React.Component{
                                 <div className="card-body p-0">
                                     <div className="row">
                                         <div className="col-lg-6 col-lg-12">
-                                            <div className="p-5">
-                                                <div className="text-center">
-                                                <Link to="/model-figure/home"><img src={FindSVG} alt="Logo" style={{maxHeight: "40%", maxWidth: "30%"}} /></Link>
-                                                    <h4 className="text-dark mb-4">Welcome to Find Jobs</h4>
+                                            <div className="p-5" >
+                                                <div className="text-center" >
+                                                <div>
+                                                    <section className="one-fourth" id="html">
+                                                        <img src={figer} width = '200' height = '200' />
+                                                    </section>
+                                                </div>
+                                                    
                                                 </div>
                                                 <div className="user">
-                                                    <MDBInput label="username" outline name="username" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
-                                                    <MDBInput type="password" label="Password" outline name="password" onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                                    <MDBInput label="username" outline name="username" style={{borderColor: 'black'}} onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
+                                                    <MDBInput type="password" label="Password" outline name="password" style={{borderColor: 'black'}}  onChange={this.onChange} onKeyPress={this.KeyPressEnter} />
                                                     {/* <div className="custom-control custom-checkbox" style={{paddingBottom: "4%", textAlign: "left"}}>
                                                         <input type="checkbox" className="custom-control-input" id="rememberMe" name="rememberMe" onChange={this.onChange} ref="rememberMe" />
                                                         <label className="custom-control-label" htmlFor="rememberMe">Remember Me</label>
                                                     </div> */}
-                                                    <button className="btn btn-info btn-block text-white btn-user" id="submit-btn" type="submit" style={{borderRadius: "20px"}} onClick={this.SubmitBtn}>SIGN IN</button>
+                                                    <button className="btn btn-orange btn-block text-white btn-user" id="submit-btn" type="submit" style={{borderRadius: "20px"}} onClick={this.SubmitBtn}>SIGN IN</button>
                                                 </div>
+                                                
                                                 {this.state.isSuccess?<Redirect to="/model-figure/home" />:<div></div>}
                                             </div>
                                         </div>

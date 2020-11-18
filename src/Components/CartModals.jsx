@@ -214,7 +214,7 @@ export default class CartModals extends React.Component {
     render() {
         return (
             <div>
-                <MDBBtn onClick={this.toggle} outline color="secondary" style={{ borderRadius: "20px", textAlign: "" }} name="cart">cart</MDBBtn>
+                <MDBBtn onClick={this.toggle} color="orange" style={{ borderRadius: "5px", textAlign: "" }} name="cart">cart</MDBBtn>
                 <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="lg">
                     <MDBModalHeader toggle={this.toggle} style={{ color: "rgb(0, 0, 0)" }}></MDBModalHeader>
                     <MDBModalBody>

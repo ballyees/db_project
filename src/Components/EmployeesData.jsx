@@ -114,7 +114,7 @@ export default class EmployeesData extends React.Component {
         return (
             <div className="row" key={data["employeeNumber"]}>
                 <div className="col-lg-12 col-md-12">
-                    <MDBBtn color="primary" onClick={this.toggleCollapse(data["employeeNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
+                    <MDBBtn color="orange" onClick={this.toggleCollapse(data["employeeNumber"])} style={{ margin: 0, width: "100%" }} className="btn-primary btn Ripple-parent"  >
                         <div className="d-flex justify-content-between">
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >[{data["employeeNumber"]}] {`${data["firstName"]} ${data["lastName"]}`}</div>
                             <div className="p-2 col-example text-left" style={{ padding: 0 }} >{data["jobTitle"]}</div>
@@ -135,10 +135,10 @@ export default class EmployeesData extends React.Component {
                                 <MDBContainer>
                                     <MDBRow>
                                         <MDBCol sm="6">
-                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} outline color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
+                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} color="warning" onClick={this.onClickEdit} name="edit">edit</MDBBtn>
                                         </MDBCol>
                                         <MDBCol sm="6">
-                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} outline color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
+                                            <MDBBtn type="button" style={{ borderRadius: "20px", width: "100%" }} color="danger" onClick={this.onClickDelete} name="delete">delete</MDBBtn>
                                         </MDBCol>
                                     </MDBRow>
                                 </MDBContainer>

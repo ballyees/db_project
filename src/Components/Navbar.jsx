@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { NavLink, Link, Redirect } from 'react-router-dom';
 import { MDBBtn, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
-import PostModals from './PostModals';
 import CartModals from './CartModals';
 import AddModals from './AddModals';
 import './Navbar.css'
+import figer from './img/FIGeR.png'
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -48,9 +48,10 @@ export default class Navbar extends Component {
     if (this.props.loginSuccess) {
       if (true) {
         userType = (
-          <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-            <PostModals onClickP2C={this.toggleMenu} style={{ borderRadius: "20px" }} />
-          </li>
+          // <li className="nav-item nav-link js-scroll-trigger" role="presentation">
+          //   <PostModals onClickP2C={this.toggleMenu} style={{ borderRadius: "20px" }} />
+          // </li>
+          <></>
         )
       }
       loginSuccess = (
@@ -58,7 +59,7 @@ export default class Navbar extends Component {
           <ul className="nav navbar-nav ml-auto">
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               <MDBDropdown>
-                <MDBDropdownToggle color="primary" outline style={{ borderRadius: "20px" }} >
+                <MDBDropdownToggle color="orange" style={{ borderRadius: "5px" }} >
                   menus
                 </MDBDropdownToggle>
                 <MDBDropdownMenu basic>
@@ -74,7 +75,7 @@ export default class Navbar extends Component {
             </li>
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
               <MDBDropdown>
-                <MDBDropdownToggle color="primary" outline style={{ borderRadius: "20px" }} >
+                <MDBDropdownToggle color="orange" style={{ borderRadius: "5px" }} >
                   Add menus
                   </MDBDropdownToggle>
                 <MDBDropdownMenu basic>
@@ -92,16 +93,16 @@ export default class Navbar extends Component {
               {this.state.cartModals ?
                 <CartModals open={this.state.cartModals} toggle={this.toggleCart} style={{ borderRadius: "20px" }} history={this.props.history} />
                 :
-                <MDBBtn onClick={this.toggleCart} outline color="secondary" style={{ borderRadius: "20px", textAlign: "" }} name="cart">cart</MDBBtn>
+                <MDBBtn onClick={this.toggleCart} color="orange" style={{ borderRadius: "5px", textAlign: "" }} name="cart">cart</MDBBtn>
               }
 
             </li>
             {userType}
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-              <MDBBtn type="button" style={{ borderRadius: "20px" }} outline color="danger" onClick={this.toggleMenu} name="logout">Edit Profile</MDBBtn>
+              <MDBBtn type="button" style={{ borderRadius: "5px" }} color="orange" onClick={this.toggleMenu} name="logout">Edit Profile</MDBBtn>
             </li>
             <li className="nav-item nav-link js-scroll-trigger" role="presentation">
-              <Link to="/model-figure/login"><MDBBtn type="button" style={{ borderRadius: "20px" }} outline color="danger" onClick={this.toggleMenu} name="logout">Logout</MDBBtn></Link>
+              <Link to="/model-figure/login"><MDBBtn type="button" outline style={{ borderRadius: "5px" }} color="red" onClick={this.toggleMenu} name="logout">Logout</MDBBtn></Link>
             </li>
 
           </ul>
@@ -115,7 +116,7 @@ export default class Navbar extends Component {
         <nav className="navbar sticky-top navbar-dark bg-dark navbar-expand-md navbar navbar-expand-lg fixed-top" id="mainNav">
           <div className="container">
             <NavLink to="/model-figure/home">
-              <span className="navbar-brand js-scroll-trigger" style={{ paddingTop: 5 }} >Model-Figure</span>
+              <img src={figer} alt='naruto' width = '100' height = '100'/>
             </NavLink>
             <button onClick={this.toggleMenu} className="navbar-toggler navbar-toggler-right" data-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"
               value="Menu"><i className="fa fa-bars"></i>
